@@ -1,10 +1,13 @@
 import React from "react";
 import Card from "../../components/ui/Card";
+import Carousel from "./element/Carousel";
 
 const Intro = () => {
   return (
     <div>
-      <Card />
+      <Card>
+        <Carousel />
+      </Card>
     </div>
   );
 };
