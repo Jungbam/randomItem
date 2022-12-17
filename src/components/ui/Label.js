@@ -41,21 +41,3 @@ const StLabel = styled.button`
       0px 0px 10px rgba(0, 0, 0, 0.25);
   }
 `;
-
-// .noselect {
-//   -webkit-touch-callout: none;
-//            user-select: none;
-// 		-webkit-tap-highlight-color: transparent;
-// }
-
-// button {
-
-// }
-
-// button:hover {
-
-// }
-
-// button:focus {
-// 	outline: none;
-// }

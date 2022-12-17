@@ -7,11 +7,15 @@ import { getItem } from "../../redux/slice/itemSlice";
 import Carousel from "./element/Carousel";
 import Modal from "../../components/ui/Modal";
 import AddItem from "./element/AddItem";
+import Loading from "../LoadingPage/Loading";
+import ErrorPage from "../ErrorPage/ErrorPage";
 
 const Intro = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const status = useSelector((state) => state);
+  const { error, isloading } = useSelector((state) => state.itemSlice);
+  console.log(error, isloading);
 
   const items = status.itemSlice.items;
   const authUser = status.itemSlice.auth;
@@ -25,29 +29,41 @@ const Intro = () => {
   };
 
   return (
-    <StIntro>
-      <Carousel />
-      <section>
-        <StArticleCol>
-          <h1>카테고리</h1>
-          <StArticle>
-            <Label>All</Label>
-            <Label>분류 1</Label>
-            <Label>분류 2</Label>
-            <Label>분류 3</Label>
-          </StArticle>
-          {authUser ? <Label onClick={closeModal}>상품 추가하기</Label> : <></>}
-          <Modal modal={modal} closeModal={closeModal}>
-            <AddItem closeModal={closeModal} />
-          </Modal>
-        </StArticleCol>
-        <StArticle>
-          {items?.map((el, i) => {
-            return <Card el={el} key={`item${i}`}></Card>;
-          })}
-        </StArticle>
-      </section>
-    </StIntro>
+    <>
+      {isloading ? <Loading /> : <></>}
+      {!isloading && error ? <ErrorPage /> : <></>}
+      {!isloading && !error ? (
+        <StIntro>
+          <Carousel />
+          <section>
+            <StArticleCol>
+              <h1>카테고리</h1>
+              <StArticle>
+                <Label>All</Label>
+                <Label>분류 1</Label>
+                <Label>분류 2</Label>
+                <Label>분류 3</Label>
+              </StArticle>
+              {authUser ? (
+                <Label onClick={closeModal}>상품 추가하기</Label>
+              ) : (
+                <></>
+              )}
+              <Modal modal={modal} closeModal={closeModal}>
+                <AddItem closeModal={closeModal} />
+              </Modal>
+            </StArticleCol>
+            <StArticle>
+              {items?.map((el, i) => {
+                return <Card el={el} key={`item${i}`}></Card>;
+              })}
+            </StArticle>
+          </section>
+        </StIntro>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

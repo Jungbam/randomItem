@@ -42,6 +42,7 @@ export const getItem = createAsyncThunk(
       if (response !== 401) {
         const items = await client.get("/items");
         const auth = await client.get("/posts");
+        await new Promise((resolve) => setTimeout(resolve, 500));
         const data = { items: items.data, auth: auth.data };
         return { ...data };
       } else {
