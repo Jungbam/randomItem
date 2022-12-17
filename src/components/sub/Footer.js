@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Footer = ({ bgColor = "inherit", height = "100px" }) => {
-  const styles = { bgColor, height };
+const Footer = () => {
   return (
-    <StFooter {...styles}>
+    <StFooter>
       <p>Copyright &copy; Mini Project in Fouth</p>
     </StFooter>
   );
@@ -16,8 +15,8 @@ const StFooter = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgba(30, 30, 30);
+  color: rgba(120, 120, 120);
   margin: 0;
-  height: ${({ height }) => height};
-  background-color: ${({ bgColor }) => bgColor};
+  height: 100px;
+  background-color: rgba(229, 232, 232, 0.9);
 `;
