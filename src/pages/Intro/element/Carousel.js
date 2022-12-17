@@ -56,7 +56,8 @@ const StDiv = styled.div`
   position: relative;
   width: 100vw;
   height: 380px;
-  background-color: black;
+  background: url("./image/fashion-gad2c23a14_1920.jpg");
+  background-size: cover;
 `;
 const StTextBox = styled.div`
   position: absolute;
