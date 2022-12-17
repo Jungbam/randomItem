@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Card from "../../components/ui/Card";
+import Label from "../../components/ui/Label";
 import Carousel from "./element/Carousel";
 
 const Intro = () => {
@@ -7,16 +9,21 @@ const Intro = () => {
     <StIntro>
       <Carousel />
       <section>
-        <article>
+        <StArticleCol>
           <h1>카테고리</h1>
-          <div>
-            <input type="button" value="All"></input>
-            <input type="button" value="분류1"></input>
-            <input type="button" value="분류2"></input>
-            <input type="button" value="분류3"></input>
-          </div>
-        </article>
-        <article></article>
+          <StArticle>
+            <Label>All</Label>
+            <Label>분류 1</Label>
+            <Label>분류 2</Label>
+            <Label>분류 3</Label>
+          </StArticle>
+        </StArticleCol>
+        <StArticle>
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </StArticle>
       </section>
     </StIntro>
   );
@@ -25,5 +32,20 @@ const Intro = () => {
 export default Intro;
 
 const StIntro = styled.div`
-  min-height: 100vh;
+  min-height: 90vh;
+  height: 100%;
+  margin-bottom: 15px;
+`;
+const StArticle = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+`;
+const StArticleCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
 `;

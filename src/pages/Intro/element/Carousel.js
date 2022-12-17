@@ -61,11 +61,12 @@ const StDiv = styled.div`
 `;
 const StTextBox = styled.div`
   position: absolute;
+  border-radius: 12px;
   top: 20px;
   left: 20px;
   width: 40vw;
-  height: 100px;
-  background-color: white;
+  height: 140px;
+  background-color: rgba(255, 255, 255, 0.6);
 `;
 
 const StyledSlider = styled(Slider)`
