@@ -1,4 +1,5 @@
 
+
 import React from "react";
 import styled from "styled-components";
 const Item = () => {
@@ -30,6 +31,7 @@ const Item = () => {
       </StItemsWrapper>
 
     </StWrapper >
+
   )
 };
 
@@ -87,4 +89,5 @@ const StItems = styled.div`
 height:350px;
 border:5px solid #000;
   `
+
 
