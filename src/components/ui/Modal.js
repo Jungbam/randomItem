@@ -2,14 +2,14 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 
-const Modal = ({ children, modal, scY = window.innerHeight }) => {
-  const styles = { modal, scY };
+const Modal = ({ children, modal, closeModal }) => {
+  const styles = { modal };
   return (
     <>
       {ReactDOM.createPortal(
         <Fragment>
-          <StModal {...modal}>{children}</StModal>
-          <StBackDrop {...styles}></StBackDrop>
+          <StModal {...styles}>{children}</StModal>
+          <StBackDrop {...styles} onClick={closeModal}></StBackDrop>
         </Fragment>,
         document.getElementById("root")
       )}
@@ -18,6 +18,9 @@ const Modal = ({ children, modal, scY = window.innerHeight }) => {
 };
 
 export default Modal;
+
+const height = document.getElementById("root").clientHeight;
+console.dir(height);
 
 const StModal = styled.div`
   position: absolute;
@@ -38,7 +41,7 @@ const StModal = styled.div`
   box-shadow: 2px 2px 6px black;
 `;
 const StBackDrop = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 120;
   margin: 0;
@@ -47,6 +50,6 @@ const StBackDrop = styled.div`
     return modal ? "block" : "none";
   }};
   width: 100vw;
-  height: ${({ scY }) => `${scY}px`};
+  height: 100vh;
   background-color: rgba(141, 141, 141, 0.8);
 `;

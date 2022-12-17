@@ -1,12 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../../components/ui/Card";
 import Label from "../../components/ui/Label";
-const a = [
-  1, 2, 3, 4, 5, 6, 7, 7, 8, 8, 8, 87, 7, 7, 6, 6, 6, 5, 5, 65, 6, 56, 5, 65, 6,
-  56, 5, 6, 56,
-];
+
 const Item = () => {
+  const { items } = useSelector((state) => state.itemSlice);
   return (
     <StItem>
       <StArticleCol>
@@ -19,8 +18,8 @@ const Item = () => {
         </StArticle>
       </StArticleCol>
       <StArticle>
-        {a.map((el, i) => (
-          <Card key={`card${i}`} />
+        {items?.map((el, i) => (
+          <Card key={`card${i}`} el={el} />
         ))}
       </StArticle>
     </StItem>

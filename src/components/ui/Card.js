@@ -1,24 +1,108 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import useInputItem from "../../hooks/useInputItem";
+import { deleteItem, updateItem } from "../../redux/slice/itemSlice";
+import Label from "./Label";
 
-const Card = () => {
+const Card = ({ el }) => {
+  const authUser = useSelector((state) => state.itemSlice.auth);
+  const dispatch = useDispatch();
+  const { input, setInput, onChangeHandler } = useInputItem();
+  const [update, setUpdate] = useState(false);
+
+  useEffect(() => {
+    setInput({
+      title: el.title,
+      price: el.price,
+      content: el.content,
+      category: el.category,
+    });
+  }, []);
+
   return (
     <StCard>
       <StHeart>
         <StIcon>♡</StIcon>
       </StHeart>
-      <StImg
-        src="https://cdn.pixabay.com/photo/2021/04/25/02/43/milk-shake-6205399_1280.png"
-        alt=""
-      />
+      <StImg src={el.Images} alt={el.title} />
       <StLittleCard>
-        <StH1>Shake</StH1>
-        <StPrice>$ 5.00</StPrice>
-        <StContetn>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit sit amet
-        </StContetn>
+        {update ? (
+          <>
+            <label>제목</label>
+            <input
+              name="title"
+              value={input.title}
+              onChange={onChangeHandler}
+            />
+          </>
+        ) : (
+          <StH1>{el.title}</StH1>
+        )}
+        {update ? (
+          <>
+            <label>가격</label>
+            <input
+              name="price"
+              value={input.price}
+              onChange={onChangeHandler}
+            />
+          </>
+        ) : (
+          <StPrice>{el.price}</StPrice>
+        )}
+        {update ? (
+          <>
+            <label>카테고리</label>
+            <select
+              onChange={onChangeHandler}
+              name="category"
+              value={input.category}
+            >
+              <option value="0">선택</option>
+              <option value="1">분류1</option>
+              <option value="2">분류2</option>
+              <option value="3">분류3</option>
+            </select>
+          </>
+        ) : (
+          <Label>분류{el.category}</Label>
+        )}
+        {update ? (
+          <>
+            <label>내용</label>
+            <input
+              name="content"
+              value={input.content}
+              onChange={onChangeHandler}
+            />
+          </>
+        ) : (
+          <></>
+        )}
       </StLittleCard>
-      <StButton>+ ADD TO CART</StButton>
+      {authUser ? (
+        <StButtonBox>
+          <StButton onClick={() => dispatch(deleteItem(el.itemId))}>
+            삭제하기
+          </StButton>
+
+          {update ? (
+            <StButton
+              onClick={() => {
+                dispatch(updateItem({ id: el.itemId, input }));
+                setUpdate(false);
+              }}
+            >
+              완료
+            </StButton>
+          ) : (
+            <StButton onClick={() => setUpdate(true)}>수정하기</StButton>
+          )}
+        </StButtonBox>
+      ) : (
+        <></>
+      )}
     </StCard>
   );
 };
@@ -29,7 +113,7 @@ const StCard = styled.div`
   position: relative;
   padding: 30px;
   width: 300px;
-  height: 350px;
+  height: 360px;
   transform: translateY(2%);
   display: flex;
   flex-direction: column;
@@ -51,7 +135,9 @@ const StIcon = styled.i`
   font-size: 3rem;
 `;
 const StImg = styled.img`
-  width: 100px;
+  width: 200px;
+  width: 190px;
+  border-radius: 12px;
 `;
 const StH1 = styled.h1`
   margin: 20px 0 0 0;
@@ -79,7 +165,11 @@ const StContetn = styled.p`
 const StLittleCard = styled.div`
   width: 70%;
 `;
-const StButton = styled.div`
+const StButtonBox = styled.div`
+  display: flex;
+  gap: 2px;
+`;
+const StButton = styled.button`
   border: none;
   padding: 7px 20px;
   width: 50%;
@@ -87,6 +177,10 @@ const StButton = styled.div`
   font-size: 1.2rem;
   background-image: linear-gradient(43deg, #be35ab 0%, #4a0e60 100%);
   color: white;
+  cursor: pointer;
   font-weight: 600;
   box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
