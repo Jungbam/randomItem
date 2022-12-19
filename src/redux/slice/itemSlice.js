@@ -1,52 +1,46 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const token = JSON.parse(localStorage.getItem("done")) ?? {};
-
-const client = axios.create({
-  baseURL: process.env.REACT_APP_SERVER,
-});
-
-client.interceptors.request.use(function (config) {
-  config.headers.authorization = token;
-  return config;
-});
-
-client.interceptors.response.use(
-  function (response) {
-    // 로직 을 401에 URL이 이거면 return
-    // 정상처리
-    if (response.status !== 401) {
-      return response;
-    } else {
-      return 401;
-    }
-  }
-  // function (error) {
-  //   //=> redirect
-  //   return Promise.reject(error);
-  // }
-);
+import { client } from "../../api/axios";
 
 const initialState = {
   isloading: false,
   error: false,
   auth: false,
   items: [],
+  famous: [],
+  last: false,
 };
 
-export const getItem = createAsyncThunk(
-  "itemSlice/getItem",
+export const getMain = createAsyncThunk(
+  "itemSlice/getMain",
   async (response, thunkAPI) => {
     try {
       if (response !== 401) {
-        const items = await client.get("/items");
-        const auth = await client.get("/posts");
+        const items = await client.get("/api/items/main");
+
         await new Promise((resolve) => setTimeout(resolve, 500));
-        const data = { items: items.data, auth: auth.data };
+        const data = { items: items.data.data };
         return { ...data };
       } else {
         return 401;
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+// 작업
+export const getItem = createAsyncThunk(
+  "itemSlice/getItem",
+  async (lastId = 0, thunkAPI) => {
+    console.log(lastId);
+    try {
+      const items = await client.get(`/api/items?lastId=${lastId || 0}`);
+      const data = { items: items.data.data };
+      if (data.items.length < 20) {
+        console.log("in");
+        return { items: [...data.items], last: true };
+      } else {
+        return { items: [...data.items], last: false };
       }
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -59,11 +53,15 @@ export const postItem = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       let result;
-      const response = await client.post("/items", data);
-      if (response.status === 201) result = await client.get("/items");
-      return result.data;
+      const response = await client.post("/api/items", data);
+      if (response.status === 201) {
+        result = await client.get("/api/items");
+        return result.data;
+      } else {
+        return thunkAPI.rejectWithValue({ message: "등록 실패  :: 서버오류" });
+      }
     } catch (err) {
-      return thunkAPI.rejectWithValue();
+      return thunkAPI.rejectWithValue({ message: "등록 실패 :: 서버오류" });
     }
   }
 );
@@ -73,8 +71,8 @@ export const deleteItem = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       let result;
-      const response = await client.delete(`/items/${id}`);
-      if (response.status === 201) result = await client.get("/items");
+      const response = await client.delete(`/api/items/${id}`);
+      if (response.status === 201) result = await client.get("/api/items");
       return result.data;
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -104,13 +102,29 @@ const itemSlice = createSlice({
     addlist: (state, action) => {},
   },
   extraReducers: {
+    [getMain.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [getMain.fulfilled]: (state, { payload }) => {
+      state.isloading = false;
+      state.auth = true;
+      state.famous = [...payload.items];
+    },
+    [getMain.rejected]: (state, action) => {
+      state.isloading = false;
+      state.error = true;
+    },
+
     [getItem.pending]: (state, action) => {
       state.isloading = true;
     },
     [getItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = [...payload.items.items];
+      if (!state.last) {
+        state.last = payload.last;
+        state.items = [...state.items, ...payload.items];
+      }
     },
     [getItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -123,7 +137,7 @@ const itemSlice = createSlice({
     [postItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload.items;
+      state.items = payload;
     },
     [postItem.rejected]: (state, action) => {
       state.isloading = false;

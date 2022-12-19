@@ -1,28 +1,77 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../../components/ui/Card";
 import Label from "../../components/ui/Label";
+import Modal from "../../components/ui/Modal";
+import { getItem } from "../../redux/slice/itemSlice";
+import ErrorPage from "../ErrorPage/ErrorPage";
+import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-  const { items } = useSelector((state) => state.itemSlice);
+  const { auth, error, items, last } = useSelector((state) => state.itemSlice);
+  const [modal, setModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const throttle = (callback, delay) => {
+    let timer = null;
+    return (e) => {
+      if (timer === null) {
+        timer = setTimeout(() => {
+          callback(e);
+          timer = null;
+        }, delay);
+      }
+    };
+  };
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight * 0.9 &&
+      !last
+    ) {
+      const lastId = items[items.length - 1]?.itemId;
+      dispatch(getItem(lastId));
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", throttle(handleScroll, 2000));
+    return window.removeEventListener("scroll", throttle(handleScroll, 2000));
+  }, []);
+
+  const closeModal = () => {
+    setModal((prev) => !prev);
+  };
+
   return (
-    <StItem>
-      <StArticleCol>
-        <h1>카테고리</h1>
-        <StArticle>
-          <Label>All</Label>
-          <Label>분류 1</Label>
-          <Label>분류 2</Label>
-          <Label>분류 3</Label>
-        </StArticle>
-      </StArticleCol>
-      <StArticle>
-        {items?.map((el, i) => (
-          <Card key={`card${i}`} el={el} />
-        ))}
-      </StArticle>
-    </StItem>
+    <>
+      {error ? <ErrorPage /> : <></>}
+      {!error ? (
+        <StItem>
+          <StArticleCol>
+            <h1>카테고리</h1>
+            <StArticle>
+              <Label>All</Label>
+              <Label>분류 1</Label>
+              <Label>분류 2</Label>
+              <Label>분류 3</Label>
+            </StArticle>
+            {auth ? <Label onClick={closeModal}>상품 추가하기</Label> : <></>}
+            <Modal modal={modal} closeModal={closeModal}>
+              <AddItem closeModal={closeModal} />
+            </Modal>
+          </StArticleCol>
+          <StArticle>
+            {items?.map((el, i) => (
+              <Card key={`card${i}`} el={el} />
+            ))}
+          </StArticle>
+        </StItem>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

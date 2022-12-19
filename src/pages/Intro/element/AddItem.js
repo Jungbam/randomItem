@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Cookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Button from "../../../components/ui/Button";
@@ -8,21 +9,33 @@ import { postItem } from "../../../redux/slice/itemSlice";
 const AddItem = ({ closeModal }) => {
   const { input, onChangeHandler, reset } = useInputItem();
   const dispatch = useDispatch();
+  const [image, setImage] = useState();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const itmeElement = {
-      ...input,
-    };
-    dispatch(postItem(itmeElement));
+
+    const formData = new FormData();
+    const { title, price, content, category } = input;
+    formData.append("title", title);
+    formData.append("price", price);
+    formData.append("content", content);
+    formData.append("category", category);
+    formData.append("image", image);
+    dispatch(postItem(formData));
+
     closeModal();
     reset();
   };
+
   const onCloseModal = (e) => {
     e.preventDefault();
+    const cookie = new Cookies();
+    console.log(cookie);
+    cookie.set("token", 2);
     closeModal();
     reset();
   };
+
   return (
     <StContainer onSubmit={onSubmitHandler}>
       <label>제목</label>
@@ -31,6 +44,14 @@ const AddItem = ({ closeModal }) => {
       <input name="price" value={input.price} onChange={onChangeHandler} />
       <label>내용</label>
       <input name="content" value={input.content} onChange={onChangeHandler} />
+      <label>이미지</label>
+      <input
+        name="content"
+        onChange={(e) => {
+          setImage(e.target.files[0]);
+        }}
+        type="file"
+      />
       <label>카테고리</label>
       <select onChange={onChangeHandler} name="category" value={input.category}>
         <option value="0">선택</option>

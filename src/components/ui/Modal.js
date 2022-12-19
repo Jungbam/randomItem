@@ -19,9 +19,6 @@ const Modal = ({ children, modal, closeModal }) => {
 
 export default Modal;
 
-const height = document.getElementById("root").clientHeight;
-console.dir(height);
-
 const StModal = styled.div`
   position: absolute;
   top: 50%;
