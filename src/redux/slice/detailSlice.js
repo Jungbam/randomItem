@@ -1,4 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { mokData } from "../../pages/Detail/mok";
+
+const initialState = {
+  mokData: mokData,
+  detail: {},
+};
 
 const detailSlice = createSlice({
   name: "detailSlice",

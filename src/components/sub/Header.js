@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Button from "../ui/Button";
+import Modal from "../ui/Modal";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 
 const Header = () => {
+  const [signInModalOpen, setSignInModalOpen] = useState(false)
+  const closeSignInModal = () => { setSignInModalOpen(false) }
+  const showSignInModal = () => { setSignInModalOpen(true) }
+
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false)
+  const closeSignUpModal = () => { setSignUpModalOpen(false) }
+  const showSignUpModal = () => { setSignUpModalOpen(true) }
   return (
     <StHeader>
       <StHeaderBox>
@@ -13,14 +23,19 @@ const Header = () => {
           </NavLink>
         </StNav>
         <NavLink to="/" style={{ textDecoration: "none" }}>
-          <StTitle>
-            <h1 className="tracking-in-contract-bck">RanTem</h1>
-          </StTitle>
+          <StTitle>RanTem</StTitle>
         </NavLink>
         <StInputBox>
           <StInput></StInput>
           <Button>Enter</Button>
         </StInputBox>
+        <div>사진</div>
+        <div>
+          <button onClick={showSignUpModal}>회원가입</button>
+          {<Modal modal={signUpModalOpen} closeModal={closeSignUpModal} ><SignUp /></Modal>}
+          <button onClick={showSignInModal}>로그인</button>
+          {<Modal modal={signInModalOpen} closeModal={closeSignInModal} ><SignIn /></Modal>}
+        </div>
       </StHeaderBox>
     </StHeader>
   );
@@ -36,47 +51,26 @@ const StHeader = styled.div`
   height: 100px;
   z-index: 100;
 `;
-const StTitle = styled.div`
-  font-family: "EF_jejudoldam";
-  .tracking-in-contract-bck {
-    -webkit-animation: tracking-in-contract-bck 1s
-      cubic-bezier(0.215, 0.61, 0.355, 1) both;
-    animation: tracking-in-contract-bck 1s cubic-bezier(0.215, 0.61, 0.355, 1)
-      both;
-    @-webkit-keyframes tracking-in-contract-bck {
-      0% {
-        letter-spacing: 1em;
-        -webkit-transform: translateZ(400px);
-        transform: translateZ(400px);
-        opacity: 0;
-      }
-      40% {
-        opacity: 0.6;
-      }
-      100% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        opacity: 1;
-      }
-    }
-    @keyframes tracking-in-contract-bck {
-      0% {
-        letter-spacing: 1em;
-        -webkit-transform: translateZ(400px);
-        transform: translateZ(400px);
-        opacity: 0;
-      }
-      40% {
-        opacity: 0.6;
-      }
-      100% {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        opacity: 1;
-      }
-    }
+
+const animateBox = keyframes`
+  0% {
+    letter-spacing: 1em;
+    transform: translateZ(400px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
   }
 `;
+const StTitle = styled.div`
+  font-family: "EF_jejudoldam";
+  animation: ${animateBox} 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+`;
+
 const StHeaderBox = styled.div`
   display: flex;
   justify-content: space-around;
