@@ -2,20 +2,21 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { __postSignin, } from "../../redux/slice/userSlice";
-const SignIn = () => {
+import { useNavigate } from "react-router-dom";
+import { logedIn } from "../../redux/slice/userSlice";
+const SignIn = ({ closeModal, showImage }) => {
   const [userEmail, setUserEmail] = useState('')
   const [userPw, setUserPw] = useState('')
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   //   - req.body
   //   {
   //     email: String,
   //       password: String,
   // }
-  const dispatch = useDispatch();
-  const onClickHandeler = () => {
-    dispatch(__postSignin({ email: userEmail, password: userPw }))
-    // const cookie = new Cookies();
-    // const a = cookie.get('token')
-
+  const test = () => {
+    dispatch(logedIn(true))
+    console.log('야뭐해?')
 
   }
 
@@ -23,7 +24,12 @@ const SignIn = () => {
     e.preventDefault();
     setUserEmail(userEmail);
     setUserPw(userPw);
-
+    dispatch(__postSignin({ email: userEmail, password: userPw }))
+    // dispatch(logedIn(true))
+    navigate("/")
+    closeModal()
+    showImage(true)
+    console.log('뭐하냐구?')
 
   }
 
@@ -38,7 +44,8 @@ const SignIn = () => {
         <StLabel>비밀번호</StLabel>
         <input value={userPw} onChange={(e) => setUserPw(e.target.value)} type='password'></input>
       </StWrapper>
-      <StButton onClick={onClickHandeler}>로그인</StButton>
+      <StButton type="submit" onClick={test}>로그인</StButton>
+
     </form>
     </>
   )
