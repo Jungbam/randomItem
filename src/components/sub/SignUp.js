@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useDispatch, useSelector } from "react-redux"
 import { __postSignup } from "../../redux/slice/userSlice";
 
-const SignUp = () => {
+const SignUp = (closeModal) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [nickmane, setNickname] = useState('')
@@ -11,14 +11,15 @@ const SignUp = () => {
   const [passwordCh, setPasswordCh] = useState('')
   const [image, setImage] = useState()
   const formData = new FormData();
-  const a = useSelector((state) => console.log("state:", state))
 
+  //    <  이미지 업로드 formData에 담기  >
   const change = (e) => {
     console.log(e.target.files[0])
     setImage(formData.append('image', e.target.files[0]));
     // console.log()
   }
 
+  //    <  form submit  >
   const submitHandler = (e) => {
     e.preventDefault();
     formData.append('email', email)
@@ -26,10 +27,8 @@ const SignUp = () => {
     formData.append('password', password)
     formData.append('passwordCheck', passwordCh)
 
-    // for (var a of formData.entries()) {
-    //   console.log('formData값:', a)
-    // }
     dispatch(__postSignup(formData))
+    closeModal.closeModal()
 
   }
 

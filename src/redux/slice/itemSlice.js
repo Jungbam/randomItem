@@ -32,14 +32,14 @@ export const getMain = createAsyncThunk(
 export const getItem = createAsyncThunk(
   "itemSlice/getItem",
   async (lastId, thunkAPI) => {
-    console.log(lastId);
+    // console.log(lastId);
     try {
       const items = await client.get(`/api/items?lastId=${lastId}`);
       const data = [...items.data.data];
       const lastValue = thunkAPI.getState().itemSlice.last;
       if (!lastValue) {
         if (data.length === 20) {
-          return { data: [...data], last: false };  
+          return { data: [...data], last: false };
         } else {
           return { data: [...data], last: true };
         }
