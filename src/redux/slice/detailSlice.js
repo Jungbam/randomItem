@@ -5,7 +5,6 @@ const initialState = {
   mokData: mokData,
   detail: {},
 };
-console.log(initialState.mokData);
 
 const detailSlice = createSlice({
   name: "detailSlice",
