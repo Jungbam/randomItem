@@ -1,25 +1,38 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import CommentForm from "../../components/CommentForm";
+import CommentForm from "./CommentForm";
+import { useDispatch, useSelector } from "react-redux";
+import { __getItems } from "../../redux/slice/detailSlice";
+import { useParams } from "react-router-dom";
 
 const Detail = () => {
+  const { id } = useParams();
+  // console.log("id", id);
+  const dispatch = useDispatch();
+
+  const { isLoading, detail } = useSelector((state) => state.itemlist);
+  console.log("state", detail.title);
+
+  useEffect(() => {
+    dispatch(__getItems(id));
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>로딩중....</div>;
+  }
+
   return (
     <>
       <DetailWrap>
         <Topline>게시글 상세보기 페이지입니다</Topline>
         <ItemWrap>
-          <TitleWrap>
-            <image>여기는 사진이 들어갈 것이야</image>
-          </TitleWrap>
-          <Title>여기는 제목이 들어가겠지</Title>
-          <Body>여기는 설명하는 게 들어올거야</Body>
+          <div>
+            <Titleset>{detail.title}</Titleset>
+            <Body>{detail.content}</Body>
+            <Price>{detail.price}</Price>
+          </div>
         </ItemWrap>
-
-        <ButtonWrap>
-          <CommentForm />
-        </ButtonWrap>
-        <div>여기는 댓글이 들어갈 것이여</div>
+        <CommentForm />
       </DetailWrap>
     </>
   );
@@ -28,7 +41,9 @@ const Detail = () => {
 export default Detail;
 
 const DetailWrap = styled.div`
-  padding: 5%;
+  width: 1000;
+  min-height: 100vh;
+
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -40,27 +55,21 @@ const Topline = styled.p`
   font-weight: 600;
 `;
 
-const TitleWrap = styled.div`
-  border: 1px solid gray;
-  position: relative;
-  border-radius: 20px;
-  background-color: white;
-`;
-
 const ItemWrap = styled.div`
   border: 1px solid gray;
-  padding: 100px;
-  height: 200px;
-  width: 700px;
+  display: flex;
+  height: 450px;
+  width: 1000px;
   border-radius: 20px;
   background-color: white;
 `;
 
-const Title = styled.div`
+const Titleset = styled.div`
   color: black;
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 300;
   padding-bottom: 30px;
+  right: 300px;
 `;
 
 const Body = styled.div`
@@ -72,7 +81,20 @@ const Body = styled.div`
   padding-bottom: 50px;
 `;
 
-const ButtonWrap = styled.div`
-  padding-top: 20px;
-  text-align: center;
+const Price = styled.div`
+  color: #616161;
+  position: relative;
+  left: 150px;
+  font-size: 20px;
+  font-weight: 100;
+  padding-bottom: 50px;
+`;
+
+const TitleWrap = styled.div`
+  color: #616161;
+  position: relative;
+  left: 150px;
+  font-size: 20px;
+  font-weight: 100;
+  padding-bottom: 50px;
 `;

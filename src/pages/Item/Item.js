@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -10,22 +9,20 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-
-  const { auth, error, last } = useSelector((state) => state.itemSlice);
+  const { auth, error, last, items } = useSelector((state) => state.itemSlice);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
-  const [itemList, setItemList] = useState([]);
+  const [scrolled, setScrolled] = useState(false);
   const [lastItemId, setLastItemId] = useState(0);
 
   const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
+      document.documentElement.scrollHeight * 0.95
     ) {
-      setLastItemId(itemList[itemList.length - 1]?.itemId);
+      setLastItemId(scrolled[scrolled.length - 1]?.itemId);
     }
-  }, [itemList]);
-
+  }, [scrolled]);
 
   useEffect(() => {
     window.addEventListener("scroll", scrollHandler);
@@ -37,8 +34,7 @@ const Item = () => {
   useEffect(() => {
     const getData = async () => {
       const res = await dispatch(getItem(lastItemId));
-      const result = await res.payload.data;
-      setItemList((prev) => [...prev, ...result]);
+      if (res.meta.requestStatus === "fulfilled") setScrolled((prev) => !prev);
     };
     if (!last) getData();
   }, [lastItemId]);
@@ -46,7 +42,6 @@ const Item = () => {
   const closeModal = () => {
     setModal((prev) => !prev);
   };
-
   return (
     <>
       {error ? <ErrorPage /> : <></>}
@@ -66,7 +61,7 @@ const Item = () => {
             </Modal>
           </StArticleCol>
           <StArticle>
-            {itemList?.map((el, i) => (
+            {items?.map((el, i) => (
               <Card key={`card${i}`} el={el} />
             ))}
           </StArticle>
@@ -79,7 +74,6 @@ const Item = () => {
 };
 
 export default Item;
-
 
 const StItem = styled.div`
   min-height: 90vh;
@@ -119,7 +113,6 @@ const StNav = styled.div`
   border: 5px solid #000;
 `;
 const StCategory = styled.div`
-
   margin: 0 50px 0 50px;
   line-height: 100px;
 `;

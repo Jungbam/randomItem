@@ -32,7 +32,7 @@ export const getMain = createAsyncThunk(
 export const getItem = createAsyncThunk(
   "itemSlice/getItem",
   async (lastId, thunkAPI) => {
-    // console.log(lastId);
+
     try {
       const items = await client.get(`/api/items?lastId=${lastId}`);
       const data = [...items.data.data];
@@ -74,7 +74,7 @@ export const deleteItem = createAsyncThunk(
     try {
       let result;
       const response = await client.delete(`/api/items/${id}`);
-      if (response.status === 201) result = await client.get("/api/items");
+      if (response.status === 200) result = await client.get("/api/items");
       return result.data;
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -88,8 +88,8 @@ export const updateItem = createAsyncThunk(
     try {
       let result;
       const { id, input } = idInput;
-      const response = await client.patch(`/items/${id}`, input);
-      if (response.status === 201) result = await client.get("/items");
+      const response = await client.patch(`/api/items/${id}`, input);
+      if (response.status === 201) result = await client.get("/api/items");
       return result.data;
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -101,7 +101,7 @@ const itemSlice = createSlice({
   name: "itemSlice",
   initialState,
   reducer: {
-    addlist: (state, action) => { },
+    addlist: (state, action) => {},
   },
   extraReducers: {
     [getMain.pending]: (state, action) => {
@@ -125,7 +125,7 @@ const itemSlice = createSlice({
         state.isloading = false;
         state.auth = true;
         state.last = payload?.last;
-        state.items = [...payload?.data];
+        state.items = [...state.items, ...payload?.data];
       }
     },
     [getItem.rejected]: (state, action) => {
@@ -139,7 +139,7 @@ const itemSlice = createSlice({
     [postItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload;
+      state.items = payload.data;
     },
     [postItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -152,7 +152,7 @@ const itemSlice = createSlice({
     [deleteItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload.items;
+      state.items = payload.data;
     },
     [deleteItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -165,7 +165,7 @@ const itemSlice = createSlice({
     [updateItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload.items;
+      state.items = payload.data;
     },
     [updateItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -175,29 +175,5 @@ const itemSlice = createSlice({
 });
 
 export const { addlist } = itemSlice.actions;
-
-//서버에 댓글 추가
-// export const __addEmail = createAsyncThunk(
-//   "ADD_COMMENT",
-//   async (arg, thunkAPI) => {
-//     try {
-//       // console.log("서버에 이메일을 등록 합니다")
-//       // console.log("arg:", arg)
-//       // console.log("thunkAPI:", thunkAPI)
-//       const email = await axios.post(`http://localhost:3001/auth/signup`, arg)
-
-//       // console.log("addData:", addData.data)
-//       return thunkAPI.fulfillWithValue(email);
-
-//     } catch (e) {
-
-//       // console.log("e:", e)
-//       return thunkAPI.rejectWithValue(e);
-//     }
-//   }
-// );
-
-
-
 
 export default itemSlice.reducer;

@@ -8,11 +8,10 @@ const Modal = ({ children, modal, closeModal }) => {
     <>
       {ReactDOM.createPortal(
         <Fragment>
-
           <StModal {...styles}>
             <StModalButton onClick={closeModal}>X</StModalButton>
-            {children}</StModal>
-
+            {children}
+          </StModal>
           <StBackDrop {...styles} onClick={closeModal}></StBackDrop>
         </Fragment>,
         document.getElementById("root")
@@ -61,3 +60,8 @@ height:30px;
 transform:translateX(13vw);
 `
 
+const StModalButton = styled.button`
+  width: 35px;
+  height: 30px;
+  transform: translateX(13vw);
+`;
