@@ -15,7 +15,7 @@ const Item = () => {
   const dispatch = useDispatch();
   const [itemList, setItemList] = useState([]);
   const [lastItemId, setLastItemId] = useState(0);
-  console.log(items);
+
   const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
