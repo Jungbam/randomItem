@@ -73,7 +73,7 @@ export const deleteItem = createAsyncThunk(
     try {
       let result;
       const response = await client.delete(`/api/items/${id}`);
-      if (response.status === 201) result = await client.get("/api/items");
+      if (response.status === 200) result = await client.get("/api/items");
       return result.data;
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -87,8 +87,8 @@ export const updateItem = createAsyncThunk(
     try {
       let result;
       const { id, input } = idInput;
-      const response = await client.patch(`/items/${id}`, input);
-      if (response.status === 201) result = await client.get("/items");
+      const response = await client.patch(`/api/items/${id}`, input);
+      if (response.status === 201) result = await client.get("/api/items");
       return result.data;
     } catch (err) {
       return thunkAPI.rejectWithValue();
@@ -136,10 +136,9 @@ const itemSlice = createSlice({
       state.isloading = true;
     },
     [postItem.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.isloading = false;
       state.auth = true;
-      state.items = payload;
+      state.items = payload.data;
     },
     [postItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -152,7 +151,7 @@ const itemSlice = createSlice({
     [deleteItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload.items;
+      state.items = payload.data;
     },
     [deleteItem.rejected]: (state, action) => {
       state.isloading = false;
@@ -165,7 +164,7 @@ const itemSlice = createSlice({
     [updateItem.fulfilled]: (state, { payload }) => {
       state.isloading = false;
       state.auth = true;
-      state.items = payload.items;
+      state.items = payload.data;
     },
     [updateItem.rejected]: (state, action) => {
       state.isloading = false;
