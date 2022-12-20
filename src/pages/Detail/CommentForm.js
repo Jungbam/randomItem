@@ -5,10 +5,8 @@ import detailSlice, {
   __addComment,
   __deleteComment,
 } from "../../redux/slice/detailSlice";
-import nextId from "react-id-generator";
 
 const CommentForm = () => {
-  const id = nextId();
   const dispatch = useDispatch();
   // const [commentUpdate, setCommetUpdate] = useState({
   //   isOpen: false,
