@@ -10,7 +10,7 @@ const Card = ({ el }) => {
   const dispatch = useDispatch();
   const { input, setInput, onChangeHandler } = useInputItem();
   const [update, setUpdate] = useState(false);
-
+  const [image, setImage] = useState();
   useEffect(() => {
     setInput({
       title: el.title,
@@ -20,12 +20,39 @@ const Card = ({ el }) => {
     });
   }, []);
 
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    const { title, price, content, category } = input;
+    formData.append("title", title);
+    formData.append("price", price);
+    formData.append("content", content);
+    formData.append("category", category);
+    formData.append("image", image ?? el.image);
+    dispatch(updateItem({ id: el.itemId, input: formData }));
+    setUpdate(false);
+  };
+
   return (
     <StCard>
       <StHeart>
         <StIcon>♡</StIcon>
       </StHeart>
-      <StImg src={el.image} alt={el.title} />
+      {update ? (
+        <>
+          <label>이미지</label>
+          <input
+            name="content"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+            type="file"
+          />
+        </>
+      ) : (
+        <StImg src={el.image} alt={el.title} />
+      )}
       <StLittleCard>
         {update ? (
           <>
@@ -83,19 +110,17 @@ const Card = ({ el }) => {
       </StLittleCard>
       {authUser ? (
         <StButtonBox>
-          <StButton onClick={() => dispatch(deleteItem(el.itemId))}>
+          <StButton
+            onClick={() => {
+              dispatch(deleteItem(el.itemId));
+              setUpdate(false);
+            }}
+          >
             삭제하기
           </StButton>
 
           {update ? (
-            <StButton
-              onClick={() => {
-                dispatch(updateItem({ id: el.itemId, input }));
-                setUpdate(false);
-              }}
-            >
-              완료
-            </StButton>
+            <StButton onClick={onSubmitHandler}>완료</StButton>
           ) : (
             <StButton onClick={() => setUpdate(true)}>수정하기</StButton>
           )}
