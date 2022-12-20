@@ -8,7 +8,11 @@ const Modal = ({ children, modal, closeModal }) => {
     <>
       {ReactDOM.createPortal(
         <Fragment>
-          <StModal {...styles}>{children}</StModal>
+
+          <StModal {...styles}>
+            <StModalButton onClick={closeModal}>X</StModalButton>
+            {children}</StModal>
+
           <StBackDrop {...styles} onClick={closeModal}></StBackDrop>
         </Fragment>,
         document.getElementById("root")
@@ -29,7 +33,7 @@ const StModal = styled.div`
     return modal ? "flex" : "none";
   }};
   width: 400px;
-  height: 300px;
+  height: 350px;
   background-color: white;
   flex-direction: column;
   justify-content: center;
@@ -48,5 +52,7 @@ const StBackDrop = styled.div`
   }};
   width: 100vw;
   height: 100vh;
+
   background-color: rgba(141, 141, 141, 0.8);
 `;
+
