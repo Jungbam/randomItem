@@ -1,15 +1,10 @@
 
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 const Item = () => {
   return (
     <StWrapper>
-      <StSearch>
-        <form>
-          <StSearchInput placeholder="검색 창" />
-        </form>
-      </StSearch>
 
       <StNav>
         <StCategory>카테고리</StCategory>
@@ -43,16 +38,6 @@ min-height:100vh;
 border:5px solid #000;
 margin:auto;
 `
-const StSearch = styled.div`
-border:5px solid #000;
-width:inherit;
-height:100px;
-`
-const StSearchInput = styled.input`
-height:50px; 
-float:right;
-margin:25px 50px 0;
-`
 const StNav = styled.div`
 display:flex;
 width:inherit;
@@ -65,17 +50,12 @@ line-height:100px;
 `
 
 const StButtonWrapper = styled.div`
-
+padding-top:30px
 `
 const StButton = styled.button`
 width:100px;
 height:30px;
 margin-right:40px;
-/* line-height:100px; */
-
-flex-flow:row nowrap;
-justify-content:flex-start;
-align-items:center;
 
 `
 const StItemsWrapper = styled.div`

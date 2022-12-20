@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../ui/Button";
+import Modal from "../ui/Modal";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 
 const Header = () => {
+  const [signInModalOpen, setSignInModalOpen] = useState(false)
+  const closeSignInModal = () => { setSignInModalOpen(false) }
+  const showSignInModal = () => { setSignInModalOpen(true) }
+
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false)
+  const closeSignUpModal = () => { setSignUpModalOpen(false) }
+  const showSignUpModal = () => { setSignUpModalOpen(true) }
   return (
     <StHeader>
       <StHeaderBox>
@@ -21,6 +31,13 @@ const Header = () => {
           <StInput></StInput>
           <Button>Enter</Button>
         </StInputBox>
+        <div>사진</div>
+        <div>
+          <button onClick={showSignUpModal}>회원가입</button>
+          {<Modal modal={signUpModalOpen} closeModal={closeSignUpModal} ><SignUp /></Modal>}
+          <button onClick={showSignInModal}>로그인</button>
+          {<Modal modal={signInModalOpen} closeModal={closeSignInModal} ><SignIn /></Modal>}
+        </div>
       </StHeaderBox>
     </StHeader>
   );
