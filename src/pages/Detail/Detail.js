@@ -10,9 +10,8 @@ const Detail = () => {
   // console.log("id", id);
   const dispatch = useDispatch();
 
-  const { isLoading, detail } = useSelector((state) => state.itemlist);
-  console.log("state", detail.title);
-
+  const { isLoading, detail } = useSelector((state) => state.detailSlice);
+  // console.log(state);
   useEffect(() => {
     dispatch(__getItems(id));
   }, [dispatch]);

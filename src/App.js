@@ -8,17 +8,17 @@ if (process.env.REACT_APP_NODE_ENV === "production") {
   disableReactDevTools();
 }
 function App() {
-  const cookie = new Cookies()
-  const dispatch = useDispatch()
-  const checkToken = useSelector((state) => state.userSlice.isLogedIn)
-  const giveToken = useSelector((state) => state.userSlice.user.token)
-  if (checkToken == true) {
-    cookie.set('token', giveToken)
-  }
+  // const cookie = new Cookies()
+  // const dispatch = useDispatch()
+  // // const checkToken = useSelector((state) => state.userSlice.isLogedIn)
+  // const giveToken = useSelector((state) => state.userSlice.user.token)
+  // if (checkToken == true) {
+  //   cookie.set('token', giveToken)
+  // }
   // const checkTokeno = useSelector((state) => console.log('여기야', state.userSlice.isLogedIn))
   return (
     <div className="App">
-      < Router />
+      <Router />
     </div>
   );
 }
