@@ -24,6 +24,7 @@ const initialState = {
   error: null,
 };
 
+
 export const __getItems = createAsyncThunk(
   "itemlist/getitems",
   async (payload, thunkAPI) => {
@@ -57,6 +58,7 @@ export const __addComment = createAsyncThunk(
     }
   }
 );
+
 
 const detailSlice = createSlice({
   name: "itemlist",
