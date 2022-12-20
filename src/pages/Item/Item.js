@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -10,8 +9,8 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
+  const { auth, error, last, items } = useSelector((state) => state.itemSlice);
 
-  const { auth, error, last } = useSelector((state) => state.itemSlice);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const [itemList, setItemList] = useState([]);
@@ -20,12 +19,11 @@ const Item = () => {
   const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
+      document.documentElement.scrollHeight * 0.95
     ) {
       setLastItemId(itemList[itemList.length - 1]?.itemId);
     }
   }, [itemList]);
-
 
   useEffect(() => {
     window.addEventListener("scroll", scrollHandler);
@@ -80,7 +78,6 @@ const Item = () => {
 
 export default Item;
 
-
 const StItem = styled.div`
   min-height: 90vh;
   height: 100%;
@@ -119,7 +116,6 @@ const StNav = styled.div`
   border: 5px solid #000;
 `;
 const StCategory = styled.div`
-
   margin: 0 50px 0 50px;
   line-height: 100px;
 `;

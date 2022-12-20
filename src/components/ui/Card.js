@@ -25,7 +25,7 @@ const Card = ({ el }) => {
       <StHeart>
         <StIcon>♡</StIcon>
       </StHeart>
-      <StImg src={el.Images} alt={el.title} />
+      <StImg src={el.image} alt={el.title} />
       <StLittleCard>
         {update ? (
           <>
