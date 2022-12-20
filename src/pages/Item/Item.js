@@ -10,6 +10,7 @@ import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
   const { auth, error, last, items } = useSelector((state) => state.itemSlice);
+
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const [itemList, setItemList] = useState([]);
@@ -107,6 +108,7 @@ const StSearchInput = styled.input`
   float: right;
   margin: 25px 50px 0;
 `;
+
 const StNav = styled.div`
   display: flex;
   width: inherit;
@@ -129,6 +131,7 @@ const StButton = styled.button`
   justify-content: flex-start;
   align-items: center;
 `;
+
 const StItemsWrapper = styled.div`
   border: 5px solid #000;
   width: inherit;
