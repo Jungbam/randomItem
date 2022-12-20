@@ -7,24 +7,23 @@ import { Cookies } from "react-cookie";
 //   Authorization: `Bearer ${token}`
 // } // Bearer하고 띄어쓰기 있음
 
-
 //    <  로그인 thunk 함수  >
 export const __postSignin = createAsyncThunk(
   "POST_SIGNIN", //액션 벨류
   async (arg, thunkAPI) => {
-
-    console.log("로그인 thunk 함수작동")
+    console.log("로그인 thunk 함수작동");
     // const cookie = new Cookies();
     try {
-      const signinData = await axios.post(`http://koyunhyeok.shop/api/auth/login`, arg);
+      const signinData = await axios.post(
+        `http://koyunhyeok.shop/api/auth/login`,
+        arg
+      );
       // console.log("서버로 부터 response를 받아옴")
-      console.log("signInResponse:", signinData.data.result)
+      console.log("signInResponse:", signinData.data.result);
       //쿠키에 토큰 저장
       // cookie.set('token', signinData.data.result.token)
 
       return thunkAPI.fulfillWithValue(signinData.data.result);
-
-
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
     }
@@ -60,8 +59,8 @@ export const __postSignup = createAsyncThunk(
 //   error: null
 // }
 const initialState = {
-  user: [], isLogedIn: false
-
+  user: [],
+  isLogedIn: false,
 };
 
 //리듀서
@@ -73,12 +72,12 @@ const userSlice = createSlice({
       return state;
     },
     logedIn: (state, action) => {
-      state.bool = action.payload
+      state.bool = action.payload;
     },
     logedOut: (state, action) => {
-      console.log('bool작동')
-      state.bool = action.payload
-    }
+      console.log("bool작동");
+      state.bool = action.payload;
+    },
   },
   extraReducers: {
     //     <  회원가입  >
@@ -93,9 +92,8 @@ const userSlice = createSlice({
     //    <  로그인  >
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
-
-      console.log("로그인 fulfilled ,action:", action)
-      state.user = action.payload
+      console.log("로그인 fulfilled ,action:", action);
+      state.user = action.payload;
 
       // state = action
     },
