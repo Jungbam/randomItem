@@ -32,6 +32,7 @@ export const getMain = createAsyncThunk(
 export const getItem = createAsyncThunk(
   "itemSlice/getItem",
   async (lastId, thunkAPI) => {
+
     try {
       const items = await client.get(`/api/items?lastId=${lastId}`);
       const data = [...items.data.data];

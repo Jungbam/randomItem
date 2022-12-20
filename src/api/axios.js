@@ -13,9 +13,7 @@ client.interceptors.request.use(function (config) {
 });
 
 client.interceptors.response.use(function (response) {
-  cookie.set(
-    "token",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3MTQ5NzgwOX0.zybYkuL8jpDhb0pIImOHtONvubbFp_O8ZLQ8gnH0Jks"
-  );
+
+
   return response;
 });
