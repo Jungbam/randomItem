@@ -12,7 +12,6 @@ const Modal = ({ children, modal, closeModal }) => {
             <StModalButton onClick={closeModal}>X</StModalButton>
             {children}
           </StModal>
-
           <StBackDrop {...styles} onClick={closeModal}></StBackDrop>
         </Fragment>,
         document.getElementById("root")
@@ -61,10 +60,8 @@ height:30px;
 transform:translateX(13vw);
 `
 
-
 const StModalButton = styled.button`
   width: 35px;
   height: 30px;
   transform: translateX(13vw);
 `;
-
