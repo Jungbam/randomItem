@@ -9,16 +9,16 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-  const { auth, error, last } = useSelector((state) => state.itemSlice);
+  const { auth, error, last, items } = useSelector((state) => state.itemSlice);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const [itemList, setItemList] = useState([]);
   const [lastItemId, setLastItemId] = useState(0);
-
+  console.log(items);
   const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
+      document.documentElement.scrollHeight * 0.95
     ) {
       setLastItemId(itemList[itemList.length - 1]?.itemId);
     }
