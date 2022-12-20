@@ -11,7 +11,7 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 const Intro = () => {
   const dispatch = useDispatch();
   const { error, isloading, famous } = useSelector((state) => state.itemSlice);
-
+  console.log(error);
   useEffect(() => {
     dispatch(getMain());
   }, [dispatch]);
