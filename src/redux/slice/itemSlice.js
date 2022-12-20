@@ -28,20 +28,22 @@ export const getMain = createAsyncThunk(
     }
   }
 );
-// 작업
+
 export const getItem = createAsyncThunk(
   "itemSlice/getItem",
-  async (lastId = 0, thunkAPI) => {
+  async (lastId, thunkAPI) => {
     console.log(lastId);
     try {
-      const items = await client.get(`/api/items?lastId=${lastId || 0}`);
-      const data = { items: items.data.data };
-      if (data.items.length < 20) {
-        console.log("in");
-        return { items: [...data.items], last: true };
-      } else {
-        return { items: [...data.items], last: false };
-      }
+      const items = await client.get(`/api/items?lastId=${lastId}`);
+      const data = [...items.data.data];
+      const lastValue = thunkAPI.getState().itemSlice.last;
+      if (!lastValue) {
+        if (data.length === 20) {
+          return { data: [...data], last: false };  
+        } else {
+          return { data: [...data], last: true };
+        }
+      } else return "stop";
     } catch (err) {
       return thunkAPI.rejectWithValue();
     }
@@ -119,11 +121,11 @@ const itemSlice = createSlice({
       state.isloading = true;
     },
     [getItem.fulfilled]: (state, { payload }) => {
-      state.isloading = false;
-      state.auth = true;
-      if (!state.last) {
-        state.last = payload.last;
-        state.items = [...state.items, ...payload.items];
+      if (payload !== "stop") {
+        state.isloading = false;
+        state.auth = true;
+        state.last = payload?.last;
+        state.items = [...payload?.data];
       }
     },
     [getItem.rejected]: (state, action) => {

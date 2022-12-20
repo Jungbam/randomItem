@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../../components/ui/Card";
@@ -9,36 +9,36 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-  const { auth, error, items, last } = useSelector((state) => state.itemSlice);
+  const { auth, error, last } = useSelector((state) => state.itemSlice);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
+  const [itemList, setItemList] = useState([]);
+  const [lastItemId, setLastItemId] = useState(0);
 
-  const throttle = (callback, delay) => {
-    let timer = null;
-    return (e) => {
-      if (timer === null) {
-        timer = setTimeout(() => {
-          callback(e);
-          timer = null;
-        }, delay);
-      }
-    };
-  };
-
-  const handleScroll = () => {
+  const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight * 0.9 &&
-      !last
+      document.documentElement.scrollHeight
     ) {
-      const lastId = items[items.length - 1]?.itemId;
-      dispatch(getItem(lastId));
+      setLastItemId(itemList[itemList.length - 1]?.itemId);
     }
-  };
+  }, [itemList]);
+
   useEffect(() => {
-    window.addEventListener("scroll", throttle(handleScroll, 2000));
-    return window.removeEventListener("scroll", throttle(handleScroll, 2000));
-  }, []);
+    window.addEventListener("scroll", scrollHandler);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, [scrollHandler]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await dispatch(getItem(lastItemId));
+      const result = await res.payload.data;
+      setItemList((prev) => [...prev, ...result]);
+    };
+    if (!last) getData();
+  }, [lastItemId]);
 
   const closeModal = () => {
     setModal((prev) => !prev);
@@ -63,7 +63,7 @@ const Item = () => {
             </Modal>
           </StArticleCol>
           <StArticle>
-            {items?.map((el, i) => (
+            {itemList?.map((el, i) => (
               <Card key={`card${i}`} el={el} />
             ))}
           </StArticle>
