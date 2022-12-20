@@ -14,18 +14,14 @@ const SignIn = ({ closeModal, showImage }) => {
   //     email: String,
   //       password: String,
   // }
-  const test = () => {
-    dispatch(logedIn(true))
-    console.log('야뭐해?')
 
-  }
 
   const submitHandler = (e) => {
     e.preventDefault();
     setUserEmail(userEmail);
     setUserPw(userPw);
     dispatch(__postSignin({ email: userEmail, password: userPw }))
-    // dispatch(logedIn(true))
+    dispatch(logedIn(true))
     navigate("/")
     closeModal()
     showImage(true)
@@ -44,7 +40,7 @@ const SignIn = ({ closeModal, showImage }) => {
         <StLabel>비밀번호</StLabel>
         <input value={userPw} onChange={(e) => setUserPw(e.target.value)} type='password'></input>
       </StWrapper>
-      <StButton type="submit" onClick={test}>로그인</StButton>
+      <StButton type="submit">로그인</StButton>
 
     </form>
     </>
