@@ -6,8 +6,9 @@ import detailSlice, {
   __deleteComment,
 } from "../../redux/slice/detailSlice";
 
-const CommentForm = () => {
+const CommentForm = ({ commentlist }) => {
   const dispatch = useDispatch();
+
   // const [commentUpdate, setCommetUpdate] = useState({
   //   isOpen: false,
   //   detail: undefined,
@@ -15,7 +16,7 @@ const CommentForm = () => {
   // });
   const data = useSelector((state) => state);
   console.log("data", data);
-  // const { detail, isLoading, error } = useSelector((state) => state);
+  const { detail, isLoading, error } = useSelector((state) => state);
   // console.log("detail", detail);
   // console.log("isLoading", isLoading);
   //   //input
@@ -28,16 +29,14 @@ const CommentForm = () => {
     const { name, value } = e.target;
     setComments({ [name]: value });
   };
-  console.log("comment", comments);
-  const onsubmit = () => {
+  // console.log("comment", comments);
+  const onsubmit = (e) => {
+    e.preventDefault();
     const payload = {
-      comments: {
-        User: { nickname: "" },
-        content: "123",
-      },
-      itemid: 321,
+      content: "",
     };
     console.log("payload", payload);
+    console.log("content", payload.content);
     dispatch(__addComment(payload));
   };
 
@@ -53,7 +52,7 @@ const CommentForm = () => {
         <AddButton onClick={onsubmit}>댓글작성</AddButton>
       </div>
       <StCommentlistWraper>
-        {/* {detail.data.comments?.map((comments, idx) => (
+        {commentlist?.map((comments, idx) => (
           <StCommentBox key={idx}>
             <StContent>{comments.content}</StContent>
             <StButton
@@ -64,7 +63,7 @@ const CommentForm = () => {
               삭제하기
             </StButton>
           </StCommentBox>
-        ))} */}
+        ))}
       </StCommentlistWraper>
     </StCommentContainer>
   );
