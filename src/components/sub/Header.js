@@ -7,10 +7,12 @@ import Modal from "../ui/Modal";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { logOut } from "../../redux/slice/userSlice";
+import { searchItem } from "../../redux/slice/itemSlice";
 
 const Header = () => {
   const { isLogedIn } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
   const { imageSrc, email, nickname } = useSelector(
     (state) => state.userSlice.user
   );
@@ -38,6 +40,13 @@ const Header = () => {
     dispatch(logOut());
   };
 
+  const enterKeyHandler = (e) => {
+    if (window.event.keyCode === 13) {
+      dispatch(searchItem(searchValue));
+      setSearchValue("");
+    }
+  };
+
   return (
     <StHeader>
       <StHeaderBox>
@@ -50,7 +59,11 @@ const Header = () => {
           <StTitle>RanTem</StTitle>
         </NavLink>
         <StInputBox>
-          <StInput></StInput>
+          <StInput
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyUp={enterKeyHandler}
+          ></StInput>
           <Button>Enter</Button>
         </StInputBox>
         {isLogedIn ? (
