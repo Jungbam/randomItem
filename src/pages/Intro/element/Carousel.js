@@ -1,50 +1,44 @@
-import React from "react";
-import Slider from "react-slick";
+import React from 'react';
+import Slider from 'react-slick';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import styled from "styled-components";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import styled from 'styled-components';
 
 const Carousel = () => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
     slidesToShow: 1,
+    speed: 700,
     slidesToScroll: 1,
     arrows: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
+    autoplay: true,
   };
   return (
     <StyledSlider {...settings}>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-02.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-03.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-04.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-05.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-06.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="./image/img-07.jpeg" />
+      </div>
+      <div>
+        <img src="./image/img-08.jpeg" />
       </div>
     </StyledSlider>
   );
@@ -52,40 +46,14 @@ const Carousel = () => {
 
 export default Carousel;
 
-const StDiv = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 380px;
-  background: url("./image/fashion-gad2c23a14_1920.jpg");
-  background-size: cover;
-`;
-const StTextBox = styled.div`
-  position: absolute;
-  border-radius: 12px;
-  top: 20px;
-  left: 20px;
-  width: 40vw;
-  height: 140px;
-  background-color: rgba(255, 255, 255, 0.6);
-`;
-
 const StyledSlider = styled(Slider)`
-  width: 100vw;
-  height: 400px;
+  /* background-color: gray; */
+  width: 100%;
+  margin-bottom: 70px;
 
-  .slick-list {
-    overflow: hidden;
-    text-align: center;
-  }
-  .slick-dots {
-    bottom: 3px;
-    z-index: 20;
-  }
-  .slick-arrow {
-    display: flex;
-    z-index: 10;
-    width: 1vw;
-    height: 1vw;
+  img {
+    margin: auto;
+    height: 42vw;
   }
 
   .slick-prev {
@@ -94,16 +62,16 @@ const StyledSlider = styled(Slider)`
     cursor: pointer;
     &::before {
       color: white;
-      content: "<";
+      content: url('https://www.cslfit.com/plain/img/prev_white.png');
     }
   }
 
   .slick-next {
-    right: 2vw;
+    right: 2vw; // 100vw;
     cursor: pointer;
     &::before {
       color: white;
-      content: ">";
+      content: url('https://www.cslfit.com/plain/img/next_white.png');
     }
   }
 `;
