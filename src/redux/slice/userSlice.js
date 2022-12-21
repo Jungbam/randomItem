@@ -1,66 +1,37 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { Cookies } from "react-cookie";
+import { client } from "../../api/axios";
 
-//    <  토큰이 필요한 API에 post,delete 요청을 할때 header 작성 양식  >
-// headers: {
-//   Authorization: `Bearer ${token}`
-// } // Bearer하고 띄어쓰기 있음
-
-//    <  로그인 thunk 함수  >
+const cookie = new Cookies();
 export const __postSignin = createAsyncThunk(
-  "POST_SIGNIN", //액션 벨류
+  "POST_SIGNIN",
   async (arg, thunkAPI) => {
-    console.log("로그인 thunk 함수작동");
-    // const cookie = new Cookies();
     try {
-      const signinData = await axios.post(
-        `http://koyunhyeok.shop/api/auth/login`,
-        arg
-      );
-      // console.log("서버로 부터 response를 받아옴")
-      console.log("signInResponse:", signinData.data.result);
-      //쿠키에 토큰 저장
-      // cookie.set('token', signinData.data.result.token)
-
+      const signinData = await client.post(`/api/auth/login`, arg);
       return thunkAPI.fulfillWithValue(signinData.data.result);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-//    <  회원가입 thunk 함수  >
 export const __postSignup = createAsyncThunk(
   "POST_SIGNUP",
   async (arg, thunkAPI) => {
-    const cookie = new Cookies();
     try {
-      //form data형식으로 header에 설정
-      const signupData = await axios({
-        method: "post",
-        url: "http://koyunhyeok.shop/api/auth/signup",
-        data: arg,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const signupData = await client.post("/api/auth/signup", arg);
       cookie.set("isLogedin", signupData.data.result);
       return thunkAPI.fulfillWithValue(signupData.data);
     } catch (e) {
-      //isLogedin
       return thunkAPI.rejectWithValue(e);
     }
   }
 );
-// const initialState = {
-//   message: '',
-//   result: true,
-//   error: null
-// }
+
 const initialState = {
-  user: [],
+  user: {},
   isLogedIn: false,
+  error: "",
 };
 
 //리듀서
@@ -75,30 +46,24 @@ const userSlice = createSlice({
       state.bool = action.payload;
     },
     logedOut: (state, action) => {
-      console.log("bool작동");
       state.bool = action.payload;
     },
   },
   extraReducers: {
-    //     <  회원가입  >
     [__postSignup.pending]: (state) => {},
     [__postSignup.fulfilled]: (state, action) => {
       state.user = action.payload.result;
     },
-    [__postSignup.rejected]: (state, action) => {
-      // state.error = action
-    },
+    [__postSignup.rejected]: (state, action) => {},
 
-    //    <  로그인  >
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
-      console.log("로그인 fulfilled ,action:", action);
-      state.user = action.payload;
-
-      // state = action
+      console.log(action.payload);
+      const { token, ...user } = action.payload;
+      cookie.set("token", token);
+      state.user = user;
     },
     [__postSignin.rejected]: (state, action) => {
-      console.log("로그인 에러:", action.payload);
       state.error = action.payload;
     },
   },

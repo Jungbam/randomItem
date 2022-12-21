@@ -128,15 +128,3 @@ const StButton = styled.button`
   justify-content: flex-start;
   align-items: center;
 `;
-
-const StItemsWrapper = styled.div`
-  border: 5px solid #000;
-  width: inherit;
-  display: flex;
-  height: 500px;
-`;
-const StItems = styled.div`
-  width: 250px;
-  height: 350px;
-  border: 5px solid #000;
-`;

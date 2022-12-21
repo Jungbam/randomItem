@@ -10,38 +10,34 @@ import { Cookies } from "react-cookie";
 
 const Header = () => {
   const [bool, setBool] = useState(false);
-  const dispatch = useDispatch();
-
-  const [signInModalOpen, setSignInModalOpen] = useState(false);
-  //    <  모달창 state에 flase-> 모달창 닫힘  >
-  const closeSignInModal = () => {
-    setSignInModalOpen(false);
-  };
-  //    < 회원가입 버튼 click ,모달창 state-> true 모달창 열림 >
-  const showSignInModal = () => {
-    setSignInModalOpen(true);
-  };
-  //    <  로그인 모달  >
-  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
-  const closeSignUpModal = () => {
-    setSignUpModalOpen(false);
-  };
-  const showSignUpModal = () => {
-    setSignUpModalOpen(true);
-  };
-
-  // const resultTrue = useSelector((state) => console.log("state:", state.userSlice.isLogedIn))
   const userImage = useSelector((state) => state.userSlice.user.imageSrc);
   const userEmail = useSelector((state) => state.userSlice.user.email);
   const userNickname = useSelector((state) => state.userSlice.user.nickname);
 
-  // const beingTrue = useSelector((state) => state.userSlice.bool)
-  // console.log('image:', userImage)
-  // useEffect(() => { dispatch(boolIsTrue(true)) }, [useSelector])
-  //  쿠키
-  const cookie = new Cookies();
-  cookie.get("token");
+  const dispatch = useDispatch();
 
+  const cookie = new Cookies();
+  const [signInModalOpen, setSignInModalOpen] = useState(false);
+
+  const closeSignInModal = () => {
+    setSignInModalOpen(false);
+  };
+
+  const showSignInModal = () => {
+    setSignInModalOpen(true);
+  };
+
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+  const closeSignUpModal = () => {
+    setSignUpModalOpen(false);
+  };
+
+  const showSignUpModal = () => {
+    setSignUpModalOpen(true);
+  };
+
+  const a = cookie.get("token");
+  console.log(a);
   const removeCookie = () => {
     cookie.remove("token");
     setBool(false);
