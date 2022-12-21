@@ -7,13 +7,12 @@ import { useParams } from "react-router-dom";
 
 const Detail = () => {
   const { id } = useParams();
-  // console.log("id", id);
   const dispatch = useDispatch();
 
   const { isLoading, detail } = useSelector((state) => state.detailSlice);
-  // console.log(state);
+
   const item = detail?.data;
-  // console.log("item", item);
+
   useEffect(() => {
     dispatch(__getItems(id));
   }, [dispatch]);
@@ -21,7 +20,6 @@ const Detail = () => {
   if (isLoading) {
     return <div>로딩중....</div>;
   }
-  // console.log(item);
   return (
     <>
       <DetailWrap>

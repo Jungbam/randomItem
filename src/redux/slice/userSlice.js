@@ -3,12 +3,28 @@ import { Cookies } from "react-cookie";
 import { client } from "../../api/axios";
 
 const cookie = new Cookies();
-export const __postSignin = createAsyncThunk(
-  "POST_SIGNIN",
+export const __authSing = createAsyncThunk(
+  "userSlice/__authSing",
   async (arg, thunkAPI) => {
     try {
-      const signinData = await client.post(`/api/auth/login`, arg);
-      return thunkAPI.fulfillWithValue(signinData.data.result);
+      const signInData = await client.get(`/api/auth`);
+      if (signInData.status !== 401) {
+        return thunkAPI.fulfillWithValue(signInData.data.result);
+      } else {
+        return thunkAPI.rejectWithValue(401);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __postSignin = createAsyncThunk(
+  "userSlice/__postSignin",
+  async (arg, thunkAPI) => {
+    try {
+      const signInData = await client.post(`/api/auth/login`, arg);
+      return thunkAPI.fulfillWithValue(signInData.data.result);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -16,11 +32,10 @@ export const __postSignin = createAsyncThunk(
 );
 
 export const __postSignup = createAsyncThunk(
-  "POST_SIGNUP",
+  "userSlice/__postSignup",
   async (arg, thunkAPI) => {
     try {
       const signupData = await client.post("/api/auth/signup", arg);
-      cookie.set("isLogedin", signupData.data.result);
       return thunkAPI.fulfillWithValue(signupData.data);
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -34,40 +49,50 @@ const initialState = {
   error: "",
 };
 
-//리듀서
 const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
-  reducer: {
-    addlist: (state, action) => {
-      return state;
-    },
-    logedIn: (state, action) => {
-      state.bool = action.payload;
-    },
-    logedOut: (state, action) => {
-      state.bool = action.payload;
+  reducers: {
+    logOut: (state, action) => {
+      state.isLogedIn = false;
+      cookie.remove("token");
     },
   },
+
   extraReducers: {
+    [__authSing.pending]: (state) => {},
+    [__authSing.fulfilled]: (state, action) => {
+      const { result, ...user } = action.payload;
+      state.user = user;
+      state.isLogedIn = true;
+    },
+    [__authSing.rejected]: (state, action) => {
+      state.user = {};
+      state.isLogedIn = false;
+    },
+
     [__postSignup.pending]: (state) => {},
     [__postSignup.fulfilled]: (state, action) => {
       state.user = action.payload.result;
     },
-    [__postSignup.rejected]: (state, action) => {},
+    [__postSignup.rejected]: (state, action) => {
+      state.isLogedIn = false;
+    },
 
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
-      console.log(action.payload);
       const { token, ...user } = action.payload;
       cookie.set("token", token);
       state.user = user;
+      state.isLogedIn = true;
     },
     [__postSignin.rejected]: (state, action) => {
       state.error = action.payload;
+      state.isLogedIn = false;
     },
   },
 });
+console.log(userSlice);
 
-export const { addlist, logedIn, logedOut } = userSlice.actions;
+export const { logOut } = userSlice.actions;
 export default userSlice.reducer;
