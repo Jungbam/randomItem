@@ -20,25 +20,25 @@ const Carousel = () => {
   return (
     <StyledSlider {...settings}>
       <div>
-        <img src="./image/img-02.jpeg" />
+        <img src="./image/img-02.jpg" />
       </div>
       <div>
-        <img src="./image/img-03.jpeg" />
+        <img src="./image/img-03.jpg" />
       </div>
       <div>
-        <img src="./image/img-04.jpeg" />
+        <img src="./image/img-04.jpg" />
       </div>
       <div>
-        <img src="./image/img-05.jpeg" />
+        <img src="./image/img-05.jpg" />
       </div>
       <div>
-        <img src="./image/img-06.jpeg" />
+        <img src="./image/img-06.jpg" />
       </div>
       <div>
-        <img src="./image/img-07.jpeg" />
+        <img src="./image/img-07.jpg" />
       </div>
       <div>
-        <img src="./image/img-08.jpeg" />
+        <img src="./image/img-08.jpg" />
       </div>
     </StyledSlider>
   );
