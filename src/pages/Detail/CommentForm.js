@@ -17,6 +17,8 @@ const CommentForm = ({ commentlist }) => {
   const data = useSelector((state) => state);
   console.log("data", data);
   const { detail, isLoading, error } = useSelector((state) => state);
+
+  const userToken = useSelector((state) => state.userSlice.user.token);
   // console.log("detail", detail);
   // console.log("isLoading", isLoading);
   //   //input
@@ -32,12 +34,19 @@ const CommentForm = ({ commentlist }) => {
   // console.log("comment", comments);
   const onsubmit = (e) => {
     e.preventDefault();
-    const payload = {
-      content: "",
+
+    dispatch(__addComment({ itemid: 149, token: userToken }));
+  };
+
+  const handleDelete = (detail, commentId) => {
+    const updatedDetail = {
+      ...detail,
+      comment: detail.comment.filter((item) => {
+        return item.id !== commentId;
+      }),
     };
-    console.log("payload", payload);
-    console.log("content", payload.content);
-    dispatch(__addComment(payload));
+    console.log(updatedDetail);
+    dispatch(__deleteComment(updatedDetail));
   };
 
   return (
@@ -58,7 +67,7 @@ const CommentForm = ({ commentlist }) => {
             <StButton
               className="rotate-in-center"
               borderColor="red"
-              // onClick={() => onDeleteComment(comment.id)}
+              onClick={() => handleDelete(comments.id)}
             >
               삭제하기
             </StButton>

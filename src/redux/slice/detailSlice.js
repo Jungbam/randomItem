@@ -43,26 +43,27 @@ export const __getItems = createAsyncThunk(
 export const __addComment = createAsyncThunk(
   "itemlist/addComment",
   async (payload, thunkAPI) => {
-    console.log("serverpayload", payload);
+    // console.log("serverpayload", payload);
     try {
-      const res = await axios.patch(
+      const res = await axios.post(
         `${process.env.REACT_APP_SERVER}/api/comments/${payload.itemid}`,
-        payload.content
+        payload.content,
+        { Authorization: `Bearer ${payload.token}` }
       );
-      console.log("res", res);
+      console.log("res", payload);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
   }
 );
-
+//삭제
 export const __deleteComment = createAsyncThunk(
-  "itemlist/deleteComment",
+  "todos/deleteComment",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios.patch(
-        `https://test-event.herokuapp.com/todos/${payload.id}`,
+      const res = await axios.delete(
+        `${process.env.REACT_APP_SERVER}/api/comments/`,
         payload
       );
       return thunkAPI.fulfillWithValue(res.data);
@@ -71,6 +72,7 @@ export const __deleteComment = createAsyncThunk(
     }
   }
 );
+
 const detailSlice = createSlice({
   name: "itemlist",
   initialState,
@@ -97,6 +99,25 @@ const detailSlice = createSlice({
       state.detail.comment = action.payload.content;
     },
     [__addComment.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__deleteComment.pending]: (state) => {
+      state.isLoading = true;
+    },
+
+    [__deleteComment.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.detail = action.payload;
+      state.todos = state.todos.map((item) => {
+        if (item.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return item;
+        }
+      });
+    },
+    [__deleteComment.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
