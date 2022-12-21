@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,17 +6,15 @@ import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import { Cookies } from "react-cookie";
+import { logOut } from "../../redux/slice/userSlice";
 
 const Header = () => {
-  const [bool, setBool] = useState(false);
-  const userImage = useSelector((state) => state.userSlice.user.imageSrc);
-  const userEmail = useSelector((state) => state.userSlice.user.email);
-  const userNickname = useSelector((state) => state.userSlice.user.nickname);
-
+  const { isLogedIn } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
+  const { imageSrc, email, nickname } = useSelector(
+    (state) => state.userSlice.user
+  );
 
-  const cookie = new Cookies();
   const [signInModalOpen, setSignInModalOpen] = useState(false);
 
   const closeSignInModal = () => {
@@ -36,11 +34,8 @@ const Header = () => {
     setSignUpModalOpen(true);
   };
 
-  const a = cookie.get("token");
-  console.log(a);
   const removeCookie = () => {
-    cookie.remove("token");
-    setBool(false);
+    dispatch(logOut());
   };
 
   return (
@@ -58,12 +53,12 @@ const Header = () => {
           <StInput></StInput>
           <Button>Enter</Button>
         </StInputBox>
-        {bool ? (
+        {isLogedIn ? (
           <StProfile>
-            <StImg src={userImage} />
+            <StImg src={imageSrc} />
             <StUserWrapper>
-              <div>{userEmail}</div>
-              <div>{userNickname}</div>
+              <div>{email}</div>
+              <div>{nickname}</div>
             </StUserWrapper>
             <button onClick={removeCookie}>로그아웃</button>
           </StProfile>
@@ -78,7 +73,7 @@ const Header = () => {
             <button onClick={showSignInModal}>로그인</button>
             {
               <Modal modal={signInModalOpen} closeModal={closeSignInModal}>
-                <SignIn closeModal={closeSignInModal} showImage={setBool} />
+                <SignIn closeModal={closeSignInModal} />
               </Modal>
               // <SignIn closeModal={closeSignInModal} /></Modal>}
             }

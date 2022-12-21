@@ -9,7 +9,8 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-  const { auth, error, last, items } = useSelector((state) => state.itemSlice);
+  const { error, last, items } = useSelector((state) => state.itemSlice);
+  const user = useSelector((state) => state.userSlice.user);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const [scrolled, setScrolled] = useState(false);
@@ -55,7 +56,11 @@ const Item = () => {
               <Label>분류 2</Label>
               <Label>분류 3</Label>
             </StArticle>
-            {auth ? <Label onClick={closeModal}>상품 추가하기</Label> : <></>}
+            {user?.admin ? (
+              <Label onClick={closeModal}>상품 추가하기</Label>
+            ) : (
+              <></>
+            )}
             <Modal modal={modal} closeModal={closeModal}>
               <AddItem closeModal={closeModal} />
             </Modal>

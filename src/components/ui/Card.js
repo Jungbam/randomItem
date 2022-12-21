@@ -6,11 +6,12 @@ import { deleteItem, updateItem } from "../../redux/slice/itemSlice";
 import Label from "./Label";
 
 const Card = ({ el }) => {
-  const authUser = useSelector((state) => state.itemSlice.auth);
+  const user = useSelector((state) => state.userSlice.user);
   const dispatch = useDispatch();
   const { input, setInput, onChangeHandler } = useInputItem();
   const [update, setUpdate] = useState(false);
   const [image, setImage] = useState();
+
   useEffect(() => {
     setInput({
       title: el.title,
@@ -109,7 +110,7 @@ const Card = ({ el }) => {
         )}
       </StLittleCard>
       <Label>상세보기{el.category}</Label>
-      {authUser ? (
+      {user?.admin ? (
         <StButtonBox>
           <StButton
             onClick={() => {
