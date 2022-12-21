@@ -20,25 +20,25 @@ const Carousel = () => {
   return (
     <StyledSlider {...settings}>
       <div>
-        <img src="./image/img-02.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/1769c37c-60fd-46e8-93a9-77ead08c998a.jpeg" />
       </div>
       <div>
-        <img src="./image/img-03.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/25fcbef6-eeae-4792-c780-c50683404d97.jpeg" />
       </div>
       <div>
-        <img src="./image/img-04.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/1f3373b8-1f81-4127-b7a8-7bde14107302.jpeg" />
       </div>
       <div>
-        <img src="./image/img-05.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/0ff42cbb-42be-4ba7-efa6-b134e9d846ae.jpeg" />
       </div>
       <div>
-        <img src="./image/img-06.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/7532ef59-5223-4c24-84fb-ae1331fc6566.jpeg" />
       </div>
       <div>
-        <img src="./image/img-07.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/911a791b-f8ba-4a10-dda9-5487828a7c8b.jpeg" />
       </div>
       <div>
-        <img src="./image/img-08.jpeg" />
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/e260f4b0-2d1a-4c79-a599-504ff8e4fab1.jpeg" />
       </div>
     </StyledSlider>
   );

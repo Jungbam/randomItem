@@ -107,7 +107,7 @@ const SearchWrapper = styled.div`
     img {
       width: 30px;
       height: 30px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     label {
