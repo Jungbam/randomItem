@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { client } from "../../api/axios";
 
 const initialState = {
   itemlist: [],
@@ -24,15 +25,12 @@ const initialState = {
   error: null,
 };
 
-
 export const __getItems = createAsyncThunk(
   "itemlist/getitems",
   async (payload, thunkAPI) => {
     // console.log("페이로드다", payload);
     try {
-      const itemlist = await axios.get(
-        `${process.env.REACT_APP_SERVER}/api/items/detail/${payload}`
-      );
+      const itemlist = await client.get(`/api/items/detail/${payload}`);
       // console.log("아이템", itemlist);
 
       return thunkAPI.fulfillWithValue(itemlist.data);
@@ -49,9 +47,9 @@ export const __addComment = createAsyncThunk(
     try {
       const res = await axios.patch(
         `${process.env.REACT_APP_SERVER}/api/comments/${payload.itemid}`,
-        payload.comments
+        payload.content
       );
-      // console.log("res", res);
+      console.log("res", res);
       return thunkAPI.fulfillWithValue(res.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -59,7 +57,20 @@ export const __addComment = createAsyncThunk(
   }
 );
 
-
+export const __deleteComment = createAsyncThunk(
+  "itemlist/deleteComment",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await axios.patch(
+        `https://test-event.herokuapp.com/todos/${payload.id}`,
+        payload
+      );
+      return thunkAPI.fulfillWithValue(res.data);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
 const detailSlice = createSlice({
   name: "itemlist",
   initialState,
@@ -83,7 +94,7 @@ const detailSlice = createSlice({
     },
     [__addComment.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.detail.comment = action.payload.comment;
+      state.detail.comment = action.payload.content;
     },
     [__addComment.rejected]: (state, action) => {
       state.isLoading = false;
