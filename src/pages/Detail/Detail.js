@@ -12,6 +12,8 @@ const Detail = () => {
 
   const { isLoading, detail } = useSelector((state) => state.detailSlice);
   // console.log(state);
+  const item = detail?.data;
+  // console.log("item", item);
   useEffect(() => {
     dispatch(__getItems(id));
   }, [dispatch]);
@@ -19,19 +21,20 @@ const Detail = () => {
   if (isLoading) {
     return <div>로딩중....</div>;
   }
-
+  // console.log(item);
   return (
     <>
       <DetailWrap>
         <Topline>게시글 상세보기 페이지입니다</Topline>
         <ItemWrap>
+          <img src={item?.image} alt={item?.title} />
           <div>
-            <Titleset>{detail.title}</Titleset>
-            <Body>{detail.content}</Body>
-            <Price>{detail.price}</Price>
+            <Titleset>{item?.title}</Titleset>
+            <Body>{item?.content}</Body>
+            <Price>{item?.price}</Price>
           </div>
         </ItemWrap>
-        <CommentForm />
+        <CommentForm commentlist={item?.Comments} />
       </DetailWrap>
     </>
   );
