@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { __postSignin } from "../../redux/slice/userSlice";
 import { useNavigate } from "react-router-dom";
 import { logedIn } from "../../redux/slice/userSlice";
+
 const SignIn = ({ closeModal, showImage }) => {
   const [userEmail, setUserEmail] = useState("");
   const [userPw, setUserPw] = useState("");
