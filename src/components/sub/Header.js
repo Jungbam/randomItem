@@ -32,7 +32,7 @@ const Header = () => {
         <input placeholder="Search"></input>
         <span className="search-logo">
           <label>검색</label>
-          <img src="./image/search.png" />
+          <img src="./image/search.jpg" />
         </span>
       </SearchWrapper>
       <StNav>

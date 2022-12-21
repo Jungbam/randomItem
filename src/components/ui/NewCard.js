@@ -63,7 +63,8 @@ const NewCard = ({ el, introBoolean }) => {
               </SalePrice>
               <Img {...styles}>
                 <label>new</label>
-                {eventSale ? <img src="./image/new.png"></img> : <span className="eventSale" />}
+                {eventSale ? <img src="./image/new.jpg"></img> : <img src="./image/new02.jpg"></img>}
+                {/* <span className="eventSale" /> */}
               </Img>
             </>
           ) : (
