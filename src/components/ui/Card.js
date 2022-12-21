@@ -108,6 +108,7 @@ const Card = ({ el }) => {
           <></>
         )}
       </StLittleCard>
+      <Label>상세보기{el.category}</Label>
       {authUser ? (
         <StButtonBox>
           <StButton

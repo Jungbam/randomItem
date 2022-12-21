@@ -9,11 +9,18 @@ const cookie = new Cookies();
 
 client.interceptors.request.use(function (config) {
   config.headers.authorization = `Bearer ${cookie.get("token")}`;
+
   return config;
 });
 
-client.interceptors.response.use(function (response) {
-
-
-  return response;
-});
+client.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      cookie.remove("token");
+      window.location.reload("/");
+    }
+  }
+);

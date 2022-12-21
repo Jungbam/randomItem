@@ -31,7 +31,6 @@ const AddItem = ({ closeModal }) => {
     e.preventDefault();
     const cookie = new Cookies();
     console.log(cookie);
-    cookie.set("token", 2);
     closeModal();
     reset();
   };
