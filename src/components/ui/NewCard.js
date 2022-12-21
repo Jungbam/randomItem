@@ -9,9 +9,12 @@ const NewCard = ({ el, introBoolean }) => {
   const authUser = useSelector((state) => state.itemSlice.auth);
   const dispatch = useDispatch();
   const { input, setInput, onChangeHandler } = useInputItem();
-  const [update, setUpdate] = useState(false);
-  console.log('introBoolean: ', introBoolean);
+  const [eventSale, setEventSale] = useState(true);
 
+  const styles = { eventSale };
+
+  // console.log('introBoolean: ', introBoolean);
+  // console.log('authUser: ', authUser);
   useEffect(() => {
     setInput({
       title: el.title,
@@ -21,8 +24,16 @@ const NewCard = ({ el, introBoolean }) => {
     });
   }, []);
 
-  console.log('authUser: ', authUser);
-
+  useEffect(() => {
+    // console.log('componentDidMount');
+    let setTime = setInterval(() => {
+      setEventSale((prev) => !prev);
+    }, 200);
+    return () => {
+      // console.log('componentWillUnmount');
+      return clearInterval(setTime);
+    };
+  }, []);
   return (
     <CardWrapper>
       {el ? (
@@ -50,10 +61,10 @@ const NewCard = ({ el, introBoolean }) => {
                 <label>할인가격</label>
                 할인 판매가 {(input.price - input.price * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원
               </SalePrice>
-              <div>
+              <Img {...styles}>
                 <label>new</label>
-                <img src="./image/new.gif"></img>
-              </div>
+                {eventSale ? <img src="./image/new.png"></img> : <img src="./image/new02.png"></img>}
+              </Img>
             </>
           ) : (
             <>
@@ -176,4 +187,14 @@ const SalePrice = styled.div`
   font-weight: bold;
 
   margin-bottom: 7px;
+`;
+
+const Img = styled.div`
+  img {
+    width: 45px;
+    height: 14px;
+    /* display: ${({ eventSale }) => {
+      return eventSale ? 'inline' : 'none';
+    }}; */
+  }
 `;
