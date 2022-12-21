@@ -67,9 +67,13 @@ export const searchItem = createAsyncThunk(
   async (searchValue, thunkAPI) => {
     try {
       const items = await client.get(`/api/items/search?title=${searchValue}`);
-      if (items.status === 200) return items.data;
-      else return thunkAPI.rejectWithValue();
+      if (items.status === 200) {
+        return items.data;
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
+      console.log("in");
       return thunkAPI.rejectWithValue();
     }
   }
@@ -125,8 +129,10 @@ export const updateItem = createAsyncThunk(
 const itemSlice = createSlice({
   name: "itemSlice",
   initialState,
-  reducer: {
-    addlist: (state, action) => {},
+  reducers: {
+    initSearch: (state, action) => {
+      state.search = [];
+    },
   },
   extraReducers: {
     [getMain.pending]: (state, action) => {
@@ -226,6 +232,6 @@ const itemSlice = createSlice({
   },
 });
 
-export const { addlist } = itemSlice.actions;
+export const { initSearch } = itemSlice.actions;
 
 export default itemSlice.reducer;
