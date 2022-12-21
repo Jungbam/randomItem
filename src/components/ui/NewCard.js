@@ -63,7 +63,7 @@ const NewCard = ({ el, introBoolean }) => {
               </SalePrice>
               <Img {...styles}>
                 <label>new</label>
-                {eventSale ? <img src="./image/new.png"></img> : <img src="./image/new02.png"></img>}
+                {eventSale ? <img src="./image/new.png"></img> : <span className="eventSale" />}
               </Img>
             </>
           ) : (
@@ -196,5 +196,10 @@ const Img = styled.div`
     /* display: ${({ eventSale }) => {
       return eventSale ? 'inline' : 'none';
     }}; */
+  }
+
+  .eventSale {
+    width: 45px;
+    height: 14px;
   }
 `;
