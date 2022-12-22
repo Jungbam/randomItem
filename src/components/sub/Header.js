@@ -1,3 +1,4 @@
+//! <<<<<<< feature/intro
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
@@ -18,7 +19,19 @@ const Header = () => {
     (state) => state.userSlice.user
   );
 
+//! =======
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+// import Button from '../ui/Button';
+import Modal from '../ui/Modal';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
+
+const Header = () => {
+//! >>>>>>> feature/KoYunHyeock/CSS
   const [signInModalOpen, setSignInModalOpen] = useState(false);
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
 
   const closeSignInModal = () => {
     setSignInModalOpen(false);
@@ -28,7 +41,6 @@ const Header = () => {
     setSignInModalOpen(true);
   };
 
-  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
   const closeSignUpModal = () => {
     setSignUpModalOpen(false);
   };
@@ -37,6 +49,7 @@ const Header = () => {
     setSignUpModalOpen(true);
   };
 
+//! <<<<<<< feature/intro
   const removeCookie = () => {
     dispatch(logOut());
   };
@@ -93,27 +106,156 @@ const Header = () => {
             }
             <button onClick={showSignInModal}>로그인</button>
             {
+ //! =======
+  return (
+    <StHeader>
+      <SearchWrapper className="search_wrapper">
+        <input placeholder="Search"></input>
+        <span className="search-logo">
+          <label>검색</label>
+          <img src="./image/search.jpg" />
+        </span>
+      </SearchWrapper>
+      <StNav>
+        <div className="router">
+          <Router>
+            <NavLink to="/">
+              <div>RanTem</div>
+            </NavLink>
+            <NavLink to="/item">
+              <div>ITEM</div>
+            </NavLink>
+          </Router>
+        </div>
+
+        <BtnWrapper>
+          {false ? (
+            <div className="user_logo">사진</div>
+          ) : (
+            <div className="btn">
+              <div onClick={showSignInModal}>LOGIN</div>
+{/*! >>>>>>> feature/KoYunHyeock/CSS*/}
               <Modal modal={signInModalOpen} closeModal={closeSignInModal}>
-                <SignIn closeModal={closeSignInModal} />
+                <SignIn />
               </Modal>
-              // <SignIn closeModal={closeSignInModal} /></Modal>}
-            }
-          </div>
-        )}
-      </StHeaderBox>
+
+              <div onClick={showSignUpModal}>SIGNUP</div>
+              <Modal modal={signUpModalOpen} closeModal={closeSignUpModal}>
+                <SignUp />
+              </Modal>
+            </div>
+          )}
+        </BtnWrapper>
+      </StNav>
     </StHeader>
   );
 };
 
 export default Header;
 
+const SearchWrapper = styled.div`
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  height: 35px;
+
+  background-color: #000000c2;
+  text-align: end;
+
+  input {
+    width: 275px;
+    height: 30px;
+    line-height: 30px;
+
+    margin-top: 2px;
+    padding: 0 5px 0 5px;
+
+    border: 0;
+
+    font-size: 12px;
+    color: #fff;
+    caret-color: #fff;
+
+    background: #0000004d;
+    outline: none;
+  }
+
+  .search-logo {
+    cursor: pointer;
+    margin-right: 1%;
+    width: 30px;
+    height: 30px;
+
+    img {
+      width: 30px;
+      height: 30px;
+      margin-top: 2px;
+    }
+
+    label {
+      display: none;
+    }
+  }
+`;
+
 const StHeader = styled.div`
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  background-color: rgba(229, 232, 232, 0.9);
-  height: 100px;
-  z-index: 100;
+  margin: 0 auto;
+  width: 100%;
+  /* width: 1300px; */
+`;
+
+const StNav = styled.nav`
+  width: 99%;
+  height: 55px;
+
+  display: flex;
+  justify-content: space-between;
+
+  .router {
+    div {
+      display: inline-block;
+      font: 12px 'Roboto', 'Nanum Gothic', '맑은 고딕', 'Malgun Gothic', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 50px;
+      color: #353535 !important;
+      margin-left: 17px;
+    }
+  }
+
+  .btn {
+    div {
+      cursor: pointer;
+      display: inline-block;
+
+      font-family: 'Roboto', 'Nanum Gothic', '맑은 고딕', 'Malgun Gothic', sans-serif;
+      font-size: 12px;
+
+      line-height: 50px;
+      margin-left: 20px;
+
+      color: #000 !important;
+
+      :hover {
+        color: #888888 !important;
+      }
+
+      :active {
+        color: #000 !important;
+      }
+    }
+  }
+`;
+
+const Router = styled.div`
+  text-align: left;
+  div {
+    margin: 0 15px;
+  }
+`;
+
+const BtnWrapper = styled.div`
+  margin-right: 20px;
 `;
 
 const animateBox = keyframes`
@@ -131,35 +273,6 @@ const animateBox = keyframes`
   }
 `;
 const StTitle = styled.div`
-  font-family: "EF_jejudoldam";
+  font-family: 'EF_jejudoldam';
   animation: ${animateBox} 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
-`;
-
-const StHeaderBox = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  max-width: 1000px;
-  height: 100%;
-  margin: 0 auto;
-`;
-const StNav = styled.nav``;
-
-const StInputBox = styled.div``;
-const StInput = styled.input``;
-
-const StProfile = styled.div`
-  display: flex;
-  border: 2px solid #000;
-  background-color: inherit;
-  opacity: 0.9;
-`;
-const StImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
-const StUserWrapper = styled.div`
-  text-align: left;
-  margin: 0 14px 0 14px;
 `;
