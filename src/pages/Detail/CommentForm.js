@@ -30,15 +30,16 @@ const CommentForm = ({ commentlist }) => {
 
   return (
     <StCommentContainer>
-      <div>
+      <StDiv>
         <Commentinput
           type="text"
           name="content"
           value={comment}
+          placeholder="댓글을 등록하세요."
           onChange={onChangeHandler}
         />
         <AddButton onClick={onsubmit}>댓글작성</AddButton>
-      </div>
+      </StDiv>
       <StCommentlistWraper>
         {commentlist?.Comments.map((comment, idx) => {
           return (
@@ -88,9 +89,9 @@ export default CommentForm;
 const StCommentContainer = styled.div`
   width: 1000px;
 `;
-
 const StCommentBox = styled.div`
   border-color: black;
+  float: right;
   height: 100px;
   border-bottom: 1px solid black;
   border-radius: 3px;
@@ -98,12 +99,12 @@ const StCommentBox = styled.div`
   width: 680px;
   margin: auto;
   justify-content: center;
-  padding: 30px 10px 10px 10px;
+  padding: 30px 0px 10px 10px;
 `;
 
 const StButton = styled.button`
   border: 1px solid ${({ borderColor }) => borderColor};
-  margin-left: 30px;
+  margin-left: 20px;
   height: 40px;
   width: 120px;
   float: right;
@@ -117,18 +118,21 @@ const AddButton = styled.button`
   border: 1px solid black;
   height: 40px;
   width: 120px;
-  background-color: #fff;
-  border-radius: 12px;
+  background-color: #000;
+  border-radius: 5px;
   cursor: pointer;
+  opacity: 0.85;
+  color: #fff;
 `;
 
 const Commentinput = styled.input`
   height: 40px;
-  width: 500px;
+  width: 550px;
   border: 2px solid black;
   margin: 20px;
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 0 12px;
+  border: 2px solid rgb(0, 0, 0, 0.2);
 `;
 const StContent = styled.div`
   padding-top: 10px;
@@ -137,7 +141,9 @@ const StContent = styled.div`
 `;
 
 const StCommentlistWraper = styled.div``;
-
+const StDiv = styled.div`
+  float: right;
+`;
 const StUpdateButton = styled.button`
   border: 1px solid black;
   height: 40px;

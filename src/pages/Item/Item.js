@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Card from "../../components/ui/Card";
 import Label from "../../components/ui/Label";
 import Modal from "../../components/ui/Modal";
+import NewCard from "../../components/ui/NewCard";
 import { getItem } from "../../redux/slice/itemSlice";
 import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
@@ -12,6 +13,7 @@ const Item = () => {
   const { error, last, items, search } = useSelector(
     (state) => state.itemSlice
   );
+  console.log(items);
   const user = useSelector((state) => state.userSlice.user);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
@@ -69,8 +71,8 @@ const Item = () => {
           </StArticleCol>
           <StArticle>
             {search.length === 0
-              ? items?.map((el, i) => <Card key={`card${i}`} el={el} />)
-              : search?.map((el, i) => <Card key={`card${i}`} el={el} />)}
+              ? items?.map((el, i) => <NewCard key={`card${i}`} el={el} />)
+              : search?.map((el, i) => <NewCard key={`card${i}`} el={el} />)}
           </StArticle>
         </StItem>
       ) : (
@@ -100,38 +102,4 @@ const StArticleCol = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 4px;
-`;
-
-const StSearch = styled.div`
-  border: 5px solid #000;
-  width: inherit;
-  height: 100px;
-`;
-const StSearchInput = styled.input`
-  height: 50px;
-  float: right;
-  margin: 25px 50px 0;
-`;
-
-const StNav = styled.div`
-  display: flex;
-  width: inherit;
-  height: 100px;
-  border: 5px solid #000;
-`;
-const StCategory = styled.div`
-  margin: 0 50px 0 50px;
-  line-height: 100px;
-`;
-
-const StButtonWrapper = styled.div``;
-const StButton = styled.button`
-  width: 100px;
-  height: 30px;
-  margin-right: 40px;
-  /* line-height:100px; */
-
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
 `;

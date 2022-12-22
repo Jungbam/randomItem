@@ -9,7 +9,7 @@ const UpdateInput = ({ update, commentId, itemId }) => {
   return (
     <div>
       {update ? (
-        <div>
+        <StDiv>
           <StInput
             type="text"
             value={updateComment}
@@ -32,7 +32,7 @@ const UpdateInput = ({ update, commentId, itemId }) => {
           >
             완료
           </AddButton>
-        </div>
+        </StDiv>
       ) : (
         <></>
       )}
@@ -43,17 +43,24 @@ const UpdateInput = ({ update, commentId, itemId }) => {
 export default UpdateInput;
 const StInput = styled.input`
   height: 40px;
-  width: 500px;
-  border: 2px solid black;
+  width: 550px;
+  border: 2px solid rgb(0, 0, 0, 0.2);
   margin: 20px;
-  border-radius: 12px;
-  padding: 0 12px;
+  border-radius: 5px;
+  padding: 12px;
 `;
 const AddButton = styled.button`
-  border: 1px solid black;
+  border: 2px solid rgb(0, 0, 0, 0.2);
   height: 40px;
   width: 120px;
-  background-color: #fff;
-  border-radius: 12px;
+  background-color: #000;
+  border-radius: 5px;
   cursor: pointer;
+  opacity: 0.85;
+  color: #fff;
+`;
+
+const StDiv = styled.div`
+  float: right;
+  padding-top: 40px;
 `;
