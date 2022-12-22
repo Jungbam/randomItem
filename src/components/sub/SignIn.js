@@ -1,72 +1,111 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useDispatch } from "react-redux";
-import { __postSignin, } from "../../redux/slice/userSlice";
-const SignIn = () => {
-  const [userEmail, setUserEmail] = useState('')
-  const [userPw, setUserPw] = useState('')
-  //   - req.body
-  //   {
-  //     email: String,
-  //       password: String,
-  // }
+import { __postSignin } from "../../redux/slice/userSlice";
+import useLoginCheck from "../../hooks/useLoginCheck";
+
+const SignIn = ({ closeModal, showImage }) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPw, setUserPw] = useState("");
   const dispatch = useDispatch();
-  const onClickHandeler = () => {
-    dispatch(__postSignin({ email: userEmail, password: userPw }))
-    // const cookie = new Cookies();
-    // const a = cookie.get('token')
-
-
-  }
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setUserEmail(userEmail);
-    setUserPw(userPw);
-
-
-  }
+    dispatch(__postSignin({ email: userEmail, password: userPw }));
+    closeModal();
+    showImage(true);
+  };
 
   return (
-    <><form onSubmit={submitHandler}>
-      <StDiv>로그인</StDiv>
-      <StWrapper>
-        <StLabel>이메일</StLabel>
-        <input value={userEmail} onChange={(e) => setUserEmail(e.target.value)} type='email'></input>
-      </StWrapper>
-      <StWrapper>
-        <StLabel>비밀번호</StLabel>
-        <input value={userPw} onChange={(e) => setUserPw(e.target.value)} type='password'></input>
-      </StWrapper>
-      <StButton onClick={onClickHandeler}>로그인</StButton>
-    </form>
+    <>
+      <StWellcom>Wellcom</StWellcom>
+      <StTitle>RanTem</StTitle>
+      <StForm onSubmit={submitHandler}>
+        <StH1>로그인</StH1>
+        <StWrapper>
+          <StInput
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            type="email"
+            placeholder="이메일"
+          ></StInput>
+          <StInput
+            value={userPw}
+            onChange={(e) => setUserPw(e.target.value)}
+            type="password"
+            placeholder="비밀번호"
+          ></StInput>
+        </StWrapper>
+        <StButton type="submit">로그인</StButton>
+      </StForm>
     </>
-  )
-}
-export default SignIn
+  );
+};
+export default SignIn;
+const StWellcom = styled.h1`
+  font-size: 54px;
+  text-align: center;
+  transform: translateY(-96px);
+`;
 
-const StDiv = styled.div`
-padding-left:4vw;
-position:relative;
-transform:translateY(-3vh);
-font-size:20px;
-
-`
+const StForm = styled.form`
+  transform: translateY(32%);
+`;
+const StH1 = styled.h1`
+  padding-left: 2vw;
+  position: relative;
+  transform: translateY(-3vh);
+  font-size: 20px;
+`;
 const StInput = styled.input`
-border: 2px solid #000;
-width:200px;
-height:30px;
+  border: none;
+  width: 360px;
+  height: 50px;
+  padding-left: 20px;
+`;
 
-`
-const StLabel = styled.label`
-width:80px;
-`
 const StWrapper = styled.div`
-display:flex;
-margin: 0 0 20px 20px;
-`
+  border: 2px solid rgb(0, 0, 0, 0.2);
+  border-radius: 5px;
+  width: 360px;
+  height: 100px;
+  margin: 0 0 0 20px;
+
+  box-sizing: content-box;
+  input {
+    &:nth-child(1) {
+      border-bottom: 2px solid rgb(0, 0, 0, 0.2);
+    }
+  }
+`;
 const StButton = styled.button`
-width:100px;
-height:40px;
-margin:20px 0 0 100px;
-`
+  width: 360px;
+  height: 40px;
+  margin: 20px 0 0 20px;
+  color: #fff;
+  background-color: #000;
+  opacity: 0.85;
+  border-radius: 5px;
+`;
+
+const animateBox = keyframes`
+  0% {
+    letter-spacing: 1em;
+    transform: translateZ(400px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+`;
+const StTitle = styled.div`
+  margin: 0 auto;
+  font-size: 24px;
+  margin-top: -40px;
+  font-family: "EF_jejudoldam";
+  animation: ${animateBox} 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+`;

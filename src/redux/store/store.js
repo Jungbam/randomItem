@@ -3,6 +3,8 @@ import detailSlice from "../slice/detailSlice";
 import itemSlice from "../slice/itemSlice";
 import userSlice from "../slice/userSlice";
 
-export const store = configureStore({
-  reducer: { detailSlice, itemSlice, userSlice },
+const store = configureStore({
+  reducer: { itemSlice, userSlice, detailSlice },
 });
+
+export default store;

@@ -1,117 +1,97 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { Cookies } from "react-cookie";
+import { client } from "../../api/axios";
 
-//    <  로그인 thunk 함수  >
-export const __postSignin = createAsyncThunk(
-  "POST_SIGNIN", //액션 벨류
+const cookie = new Cookies();
+export const __authSing = createAsyncThunk(
+  "userSlice/__authSing",
   async (arg, thunkAPI) => {
-    const cookie = new Cookies();
     try {
-      const signinData = await axios.post(
-        `http://koyunhyeok.shop/api/auth/login`,
-        arg
-      );
-      //콘솔에서 토큰위치 찾고 데이터 뽑아오기
-      //const token = postData.Response.result.token
-      //쿠키에 토큰 저장
-      // cookie.set('token', token)
-      return thunkAPI.fulfillWithValue(signinData);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
+      const signInData = await client.get(`/api/auth`);
+      if (signInData.status !== 401) {
+        return thunkAPI.fulfillWithValue(signInData.data.result);
+      } else {
+        return thunkAPI.rejectWithValue(401);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-//    <  회원가입 thunk 함수  >
-export const __postSignup = createAsyncThunk(
-  "POST_SIGNUP",
+export const __postSignin = createAsyncThunk(
+  "userSlice/__postSignin",
   async (arg, thunkAPI) => {
-    const cookie = new Cookies();
     try {
-      //form data형식으로 header에 설정
-      const signupData = await axios({
-        method: "post",
-        url: "http://koyunhyeok.shop/api/auth/signup",
-        data: arg,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      cookie.set("isLogedin", signupData.data.result);
+      const signInData = await client.post(`/api/auth/login`, arg);
+      return thunkAPI.fulfillWithValue(signInData.data.result);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __postSignup = createAsyncThunk(
+  "userSlice/__postSignup",
+  async (arg, thunkAPI) => {
+    try {
+      const signupData = await client.post("/api/auth/signup", arg);
       return thunkAPI.fulfillWithValue(signupData.data);
     } catch (e) {
-      //isLogedin
       return thunkAPI.rejectWithValue(e);
     }
   }
 );
-// const initialState = {
-//   message: '',
-//   result: true,
-//   error: null
-// }
+
 const initialState = {
-  user: [],
+  user: {},
+  isLogedIn: false,
+  error: "",
 };
 
-//리듀서
 const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
-  reducer: {
-    addlist: (state, action) => {
-      return state;
+  reducers: {
+    logOut: (state, action) => {
+      state.isLogedIn = false;
+      cookie.remove("token");
     },
   },
+
   extraReducers: {
-    //     <  회원가입  >
+    [__authSing.pending]: (state) => {},
+    [__authSing.fulfilled]: (state, action) => {
+      const { result, ...user } = action.payload;
+      state.user = user;
+      state.isLogedIn = true;
+    },
+    [__authSing.rejected]: (state, action) => {
+      state.user = {};
+      state.isLogedIn = false;
+    },
+
     [__postSignup.pending]: (state) => {},
     [__postSignup.fulfilled]: (state, action) => {
       state.user = action.payload.result;
     },
     [__postSignup.rejected]: (state, action) => {
-      // state.error = action
+      state.isLogedIn = false;
     },
 
-    //    <  로그인  >
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
-      // state = action
+      const { token, ...user } = action.payload;
+      cookie.set("token", token);
+      state.user = user;
+      state.isLogedIn = true;
     },
     [__postSignin.rejected]: (state, action) => {
-      console.log("로그인 에러:", action.payload);
       state.error = action.payload;
+      state.isLogedIn = false;
     },
   },
 });
 
-////////////img
-// const [imgArr, setImgArr] = useState([]);
-// const convertToBase64 = (file) => {
-//   return new Promise((resolve, reject) => {
-//     const fileReader = new FileReader();
-//     fileReader.readAsDataURL(file);
-//     fileReader.onload = () => {
-//       resolve(fileReader.result);
-//     };
-//     fileReader.onerror = (error) => {
-//       reject(error);
-//     };
-//   });
-// };
-// const handleFileUpload = async (e) => {
-//   const file = e.target.files[0];
-//   const fileName = e.target.files[0].name;
-//   const base64 = await convertToBase64(file);
-//   setImgArr([...imgArr, { fileSeq: undefined, fileName, fileData: base64 }]);
-// };
-// const deleteImg = (fileName) => {
-//   const res = imgArr.filter((item) => {
-//     return item.fileName !== fileName;
-//   });
-//   setImgArr(res);
-// };
-
-export const { addlist } = userSlice.actions;
+export const { logOut } = userSlice.actions;
 export default userSlice.reducer;

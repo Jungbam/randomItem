@@ -9,7 +9,7 @@ const Modal = ({ children, modal, closeModal }) => {
       {ReactDOM.createPortal(
         <Fragment>
           <StModal {...styles}>
-            <StModalButton onClick={closeModal}>X</StModalButton>
+            <StModalButton onClick={closeModal}>닫기</StModalButton>
             {children}
           </StModal>
           <StBackDrop {...styles} onClick={closeModal}></StBackDrop>
@@ -32,7 +32,7 @@ const StModal = styled.div`
     return modal ? "flex" : "none";
   }};
   width: 400px;
-  height: 350px;
+  height: 500px;
   background-color: white;
   flex-direction: column;
   justify-content: center;
@@ -56,7 +56,12 @@ const StBackDrop = styled.div`
 `;
 
 const StModalButton = styled.button`
-  width: 35px;
-  height: 30px;
-  transform: translateX(13vw);
+  width: 360px;
+  height: 40px;
+  position: absolute;
+  transform: translateY(220px);
+  color: #fff;
+  background-color: rgb(0, 0, 0, 0.85);
+  border-radius: 5px;
+  margin-left: 20px;
 `;
