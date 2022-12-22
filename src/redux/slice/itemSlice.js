@@ -85,6 +85,7 @@ export const postItem = createAsyncThunk(
     try {
       let result;
       const response = await client.post("/api/items", data);
+      await new Promise((resolve) => setTimeout(resolve, 500));
       if (response.status === 201) {
         result = await client.get("/api/items");
         return result.data;
