@@ -1,50 +1,44 @@
-import React from "react";
-import Slider from "react-slick";
+import React from 'react';
+import Slider from 'react-slick';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import styled from "styled-components";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import styled from 'styled-components';
 
 const Carousel = () => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
     slidesToShow: 1,
+    speed: 700,
     slidesToScroll: 1,
     arrows: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
+    autoplay: true,
   };
   return (
     <StyledSlider {...settings}>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/1769c37c-60fd-46e8-93a9-77ead08c998a.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/25fcbef6-eeae-4792-c780-c50683404d97.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/1f3373b8-1f81-4127-b7a8-7bde14107302.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/0ff42cbb-42be-4ba7-efa6-b134e9d846ae.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/7532ef59-5223-4c24-84fb-ae1331fc6566.jpeg" />
       </div>
       <div>
-        <StDiv>
-          <StTextBox></StTextBox>
-        </StDiv>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/911a791b-f8ba-4a10-dda9-5487828a7c8b.jpeg" />
+      </div>
+      <div>
+        <img src="https://file.cafe24cos.com/banner-admin-live/upload/manaire1/e260f4b0-2d1a-4c79-a599-504ff8e4fab1.jpeg" />
       </div>
     </StyledSlider>
   );
@@ -52,40 +46,14 @@ const Carousel = () => {
 
 export default Carousel;
 
-const StDiv = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 380px;
-  background: url("./image/fashion-gad2c23a14_1920.jpg");
-  background-size: cover;
-`;
-const StTextBox = styled.div`
-  position: absolute;
-  border-radius: 12px;
-  top: 20px;
-  left: 20px;
-  width: 40vw;
-  height: 140px;
-  background-color: rgba(255, 255, 255, 0.6);
-`;
-
 const StyledSlider = styled(Slider)`
-  width: 100vw;
-  height: 400px;
+  /* background-color: gray; */
+  width: 100%;
+  margin-bottom: 70px;
 
-  .slick-list {
-    overflow: hidden;
-    text-align: center;
-  }
-  .slick-dots {
-    bottom: 3px;
-    z-index: 20;
-  }
-  .slick-arrow {
-    display: flex;
-    z-index: 10;
-    width: 1vw;
-    height: 1vw;
+  img {
+    margin: auto;
+    height: 42vw;
   }
 
   .slick-prev {
@@ -94,16 +62,16 @@ const StyledSlider = styled(Slider)`
     cursor: pointer;
     &::before {
       color: white;
-      content: "<";
+      content: url('https://www.cslfit.com/plain/img/prev_white.png');
     }
   }
 
   .slick-next {
-    right: 2vw;
+    right: 2vw; // 100vw;
     cursor: pointer;
     &::before {
       color: white;
-      content: ">";
+      content: url('https://www.cslfit.com/plain/img/next_white.png');
     }
   }
 `;

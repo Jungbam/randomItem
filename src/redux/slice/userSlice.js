@@ -1,61 +1,52 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Cookies } from "react-cookie";
-import { client } from "../../api/axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Cookies } from 'react-cookie';
+import { client } from '../../api/axios';
 
 const cookie = new Cookies();
-export const __authSing = createAsyncThunk(
-  "userSlice/__authSing",
-  async (arg, thunkAPI) => {
-    try {
-      const signInData = await client.get(`/api/auth`);
-      if (signInData.status !== 401) {
-        return thunkAPI.fulfillWithValue(signInData.data.result);
-      } else {
-        return thunkAPI.rejectWithValue(401);
-      }
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
-export const __postSignin = createAsyncThunk(
-  "userSlice/__postSignin",
-  async (arg, thunkAPI) => {
-    try {
-      const signInData = await client.post(`/api/auth/login`, arg);
+export const __authSing = createAsyncThunk('userSlice/__authSing', async (arg, thunkAPI) => {
+  try {
+    const signInData = await client.get(`/api/auth`);
+    if (signInData.status !== 401) {
       return thunkAPI.fulfillWithValue(signInData.data.result);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+    } else {
+      return thunkAPI.rejectWithValue(401);
     }
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
 
-export const __postSignup = createAsyncThunk(
-  "userSlice/__postSignup",
-  async (arg, thunkAPI) => {
-    try {
-      const signupData = await client.post("/api/auth/signup", arg);
-      return thunkAPI.fulfillWithValue(signupData.data);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
-    }
+export const __postSignin = createAsyncThunk('userSlice/__postSignin', async (arg, thunkAPI) => {
+  try {
+    const signInData = await client.post(`/api/auth/login`, arg);
+    return thunkAPI.fulfillWithValue(signInData.data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
+
+export const __postSignup = createAsyncThunk('userSlice/__postSignup', async (arg, thunkAPI) => {
+  try {
+    const signupData = await client.post('/api/auth/signup', arg);
+    return thunkAPI.fulfillWithValue(signupData.data);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e);
+  }
+});
 
 const initialState = {
   user: {},
   isLogedIn: false,
-  error: "",
+  error: '',
 };
 
 const userSlice = createSlice({
-  name: "userSlice",
+  name: 'userSlice',
   initialState: initialState,
   reducers: {
     logOut: (state, action) => {
       state.isLogedIn = false;
-      cookie.remove("token");
+      cookie.remove('token');
     },
   },
 
@@ -82,7 +73,7 @@ const userSlice = createSlice({
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
       const { token, ...user } = action.payload;
-      cookie.set("token", token);
+      cookie.set('token', token);
       state.user = user;
       state.isLogedIn = true;
     },
