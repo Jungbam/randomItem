@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { client } from "../../api/axios";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { client } from '../../api/axios';
 
 const initialState = {
   isloading: false,
@@ -11,124 +11,104 @@ const initialState = {
   last: false,
 };
 
-export const getMain = createAsyncThunk(
-  "itemSlice/getMain",
-  async (response, thunkAPI) => {
-    try {
-      if (response !== 401) {
-        const items = await client.get("/api/items/main");
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const data = { items: items.data.data };
-        return { ...data };
-      } else {
-        return 401;
-      }
-    } catch (err) {
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-export const getItem = createAsyncThunk(
-  "itemSlice/getItem",
-  async (lastId, thunkAPI) => {
-    try {
-      const items = await client.get(`/api/items?lastId=${lastId}`);
-      const data = [...items.data.data];
-      const lastValue = thunkAPI.getState().itemSlice.last;
-      if (!lastValue) {
-        if (data.length === 20) {
-          return { data: [...data], last: false };
-        } else {
-          return { data: [...data], last: true };
-        }
-      } else return "stop";
-    } catch (err) {
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-export const searchLabel = createAsyncThunk(
-  "itemSlice/searchLabel",
-  async (category, thunkAPI) => {
-    try {
-      const items = await client.get(`/api/items/category/${category}`);
-      if (items.status === 200) return items.data;
-      else return thunkAPI.rejectWithValue(items.result);
-    } catch (err) {
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-export const searchItem = createAsyncThunk(
-  "itemSlice/searchItem",
-  async (searchValue, thunkAPI) => {
-    try {
-      const items = await client.get(`/api/items/search?title=${searchValue}`);
-      if (items.status === 200) {
-        return items.data;
-      } else {
-        return thunkAPI.rejectWithValue();
-      }
-    } catch (err) {
-      console.log("in");
-      return thunkAPI.rejectWithValue();
-    }
-  }
-);
-
-export const postItem = createAsyncThunk(
-  "itemSlice/postItem",
-  async (data, thunkAPI) => {
-    try {
-      let result;
-      const response = await client.post("/api/items", data);
+export const getMain = createAsyncThunk('itemSlice/getMain', async (response, thunkAPI) => {
+  try {
+    if (response !== 401) {
+      const items = await client.get('/api/items/main');
       await new Promise((resolve) => setTimeout(resolve, 500));
-      if (response.status === 201) {
-        result = await client.get("/api/items");
-        return result.data;
+      const data = { items: items.data.data };
+      return { ...data };
+    } else {
+      return 401;
+    }
+  } catch (err) {
+    return thunkAPI.rejectWithValue();
+  }
+});
+
+export const getItem = createAsyncThunk('itemSlice/getItem', async (lastId, thunkAPI) => {
+  try {
+    const items = await client.get(`/api/items?lastId=${lastId}`);
+    const data = [...items.data.data];
+    const lastValue = thunkAPI.getState().itemSlice.last;
+    if (!lastValue) {
+      if (data.length === 20) {
+        return { data: [...data], last: false };
       } else {
-        return thunkAPI.rejectWithValue({ message: "등록 실패  :: 서버오류" });
+        return { data: [...data], last: true };
       }
-    } catch (err) {
-      return thunkAPI.rejectWithValue({ message: "등록 실패 :: 서버오류" });
-    }
+    } else return 'stop';
+  } catch (err) {
+    return thunkAPI.rejectWithValue();
   }
-);
+});
 
-export const deleteItem = createAsyncThunk(
-  "itemSlice/deleteItem",
-  async (id, thunkAPI) => {
-    try {
-      let result;
-      const response = await client.delete(`/api/items/${id}`);
-      if (response.status === 200) result = await client.get("/api/items");
-      return result.data;
-    } catch (err) {
+export const searchLabel = createAsyncThunk('itemSlice/searchLabel', async (category, thunkAPI) => {
+  console.log('category: ', category);
+  try {
+    const items = await client.get(`/api/items/category/${category}`);
+    if (items.status === 200) return items.data;
+    else return thunkAPI.rejectWithValue(items.result);
+  } catch (err) {
+    return thunkAPI.rejectWithValue();
+  }
+});
+
+export const searchItem = createAsyncThunk('itemSlice/searchItem', async (searchValue, thunkAPI) => {
+  try {
+    const items = await client.get(`/api/items/search?title=${searchValue}`);
+    if (items.status === 200) {
+      return items.data;
+    } else {
       return thunkAPI.rejectWithValue();
     }
+  } catch (err) {
+    console.log('in');
+    return thunkAPI.rejectWithValue();
   }
-);
+});
 
-export const updateItem = createAsyncThunk(
-  "itemSlice/updateItem",
-  async (idInput, thunkAPI) => {
-    try {
-      let result;
-      const { id, input } = idInput;
-      const response = await client.patch(`/api/items/${id}`, input);
-      if (response.status === 201) result = await client.get("/api/items");
+export const postItem = createAsyncThunk('itemSlice/postItem', async (data, thunkAPI) => {
+  try {
+    let result;
+    const response = await client.post('/api/items', data);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    if (response.status === 201) {
+      result = await client.get('/api/items');
       return result.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue();
+    } else {
+      return thunkAPI.rejectWithValue({ message: '등록 실패  :: 서버오류' });
     }
+  } catch (err) {
+    return thunkAPI.rejectWithValue({ message: '등록 실패 :: 서버오류' });
   }
-);
+});
+
+export const deleteItem = createAsyncThunk('itemSlice/deleteItem', async (id, thunkAPI) => {
+  try {
+    let result;
+    const response = await client.delete(`/api/items/${id}`);
+    if (response.status === 200) result = await client.get('/api/items');
+    return result.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue();
+  }
+});
+
+export const updateItem = createAsyncThunk('itemSlice/updateItem', async (idInput, thunkAPI) => {
+  try {
+    let result;
+    const { id, input } = idInput;
+    const response = await client.patch(`/api/items/${id}`, input);
+    if (response.status === 201) result = await client.get('/api/items');
+    return result.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue();
+  }
+});
 
 const itemSlice = createSlice({
-  name: "itemSlice",
+  name: 'itemSlice',
   initialState,
   reducers: {
     initSearch: (state, action) => {
@@ -180,7 +160,7 @@ const itemSlice = createSlice({
       state.isloading = true;
     },
     [getItem.fulfilled]: (state, { payload }) => {
-      if (payload !== "stop") {
+      if (payload !== 'stop') {
         state.isloading = false;
         state.auth = true;
         state.last = payload?.last;

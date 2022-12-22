@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const NewLabel = ({ children, onClick }) => {
-  return <StLabel onClick={onClick}>{children}</StLabel>;
+const NewLabel = ({ children, onClick, value }) => {
+  return (
+    <StLabel value={value} onClick={onClick}>
+      {children}
+    </StLabel>
+  );
 };
 
 export default NewLabel;
 
 NewLabel.defaultProps = {
   onClick: () => {},
+  value: '',
 };
 const StLabel = styled.button`
   cursor: pointer;
