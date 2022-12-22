@@ -5,7 +5,8 @@ import Card from "../../components/ui/Card";
 import Label from "../../components/ui/Label";
 import Modal from "../../components/ui/Modal";
 import NewCard from "../../components/ui/NewCard";
-import { getItem } from "../../redux/slice/itemSlice";
+import NewLabel from "../../components/ui/NewLabel";
+import { getItem, initSearch, searchLabel } from "../../redux/slice/itemSlice";
 import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
@@ -44,6 +45,10 @@ const Item = () => {
     if (!last) getData();
   }, [lastItemId]);
 
+  const onClickLabelHandler = (e) => {
+    dispatch(searchLabel(e.target.value));
+  };
+
   const closeModal = () => {
     setModal((prev) => !prev);
   };
@@ -55,16 +60,31 @@ const Item = () => {
           <StArticleCol>
             <h1>카테고리</h1>
             <StArticle>
-              <Label>All</Label>
-              <Label>분류 1</Label>
-              <Label>분류 2</Label>
-              <Label>분류 3</Label>
+              <NewLabel
+                onClick={() => {
+                  dispatch(initSearch());
+                }}
+              >
+                All
+              </NewLabel>
+              <NewLabel onClick={onClickLabelHandler} value={"봄"}>
+                봄
+              </NewLabel>
+              <NewLabel onClick={onClickLabelHandler} value={"여름"}>
+                여름
+              </NewLabel>
+              <NewLabel onClick={onClickLabelHandler} value={"가을"}>
+                가을
+              </NewLabel>
+              <NewLabel onClick={onClickLabelHandler} value={"겨울"}>
+                겨울
+              </NewLabel>
             </StArticle>
             {user?.admin ? (
-              <Label onClick={closeModal}>상품 추가하기</Label>
-            ) : (
-              <></>
-            )}
+              <AddItemBtn>
+                <NewLabel onClick={closeModal}>상품 추가하기</NewLabel>
+              </AddItemBtn>
+            ) : null}
             <Modal modal={modal} closeModal={closeModal}>
               <AddItem closeModal={closeModal} />
             </Modal>
@@ -84,6 +104,9 @@ const Item = () => {
 
 export default Item;
 
+const AddItemBtn = styled.div`
+  float: right;
+`;
 const StItem = styled.div`
   min-height: 90vh;
   height: 100%;

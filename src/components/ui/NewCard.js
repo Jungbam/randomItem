@@ -5,22 +5,13 @@ import useInputItem from "../../hooks/useInputItem";
 import { deleteItem } from "../../redux/slice/itemSlice";
 import styled from "styled-components";
 
-const NewCard = ({ el, introBoolean }) => {
+const NewCard = ({ el }) => {
   const user = useSelector((state) => state.userSlice.user);
   const dispatch = useDispatch();
   const { input, setInput, onChangeHandler } = useInputItem();
   const [eventSale, setEventSale] = useState(true);
 
   const styles = { eventSale };
-
-  useEffect(() => {
-    setInput({
-      title: el.title,
-      price: el.price,
-      content: el.content,
-      category: el.category,
-    });
-  }, []);
 
   useEffect(() => {
     let setTime = setInterval(() => {
@@ -44,51 +35,19 @@ const NewCard = ({ el, introBoolean }) => {
               style={{ textDecoration: "none" }}
             >
               <label>상품명</label>
-              {input.title}
+              {el.title}
             </NavLink>
           </Title>
           <Category>
             <label>카테고리</label>
-            {input.category}
+            {el.category}
           </Category>
-
-          {introBoolean ? (
-            <>
-              <Price>
-                <label>가격</label>
-                {input.price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                원
-              </Price>
-              <SalePrice>
-                <label>할인가격</label>
-                할인 판매가{" "}
-                {(input.price - input.price * 0.1)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                원
-              </SalePrice>
-              <Img {...styles}>
-                <label>new</label>
-                {eventSale ? (
-                  <img src="./image/new.jpg" alt="이미지"></img>
-                ) : (
-                  <img src="./image/new02.jpg" alt="이미지"></img>
-                )}
-              </Img>
-            </>
-          ) : (
-            <>
-              <ItemPagePrice>
-                <label>가격</label>
-                {input.price
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                원
-              </ItemPagePrice>
-            </>
-          )}
+          <>
+            <ItemPagePrice>
+              <label>가격</label>
+              {el.price}원
+            </ItemPagePrice>
+          </>
           {user?.admin ? (
             <AdminWrapper>
               <NavLink
@@ -110,7 +69,6 @@ const NewCard = ({ el, introBoolean }) => {
 
 export default NewCard;
 
-// authUser button
 const AdminWrapper = styled.div`
   div {
     margin: 10px 5px;

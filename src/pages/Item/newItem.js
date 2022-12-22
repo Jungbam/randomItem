@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-// import Card from '../../components/ui/Card';
-// import Label from '../../components/ui/Label';
 import NewCard from "../../components/ui/NewCard";
 import NewLabel from "../../components/ui/NewLabel";
 import Modal from "../../components/ui/Modal";
@@ -21,10 +19,12 @@ const NewItem = () => {
   const [lastItemId, setLastItemId] = useState(0);
 
   const scrollHandler = useCallback(() => {
+    console.log("in");
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       document.documentElement.scrollHeight * 0.95
     ) {
+      console.log("up");
       setLastItemId(scrolled[scrolled.length - 1]?.itemId);
     }
   }, [scrolled]);

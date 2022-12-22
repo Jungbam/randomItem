@@ -9,9 +9,9 @@ import Header from "./components/sub/Header";
 import Detail from "./pages/Detail/Detail";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Intro from "./pages/Intro/Intro";
+import Item from "./pages/Item/Item";
 import NewItem from "./pages/Item/newItem";
-// import Item from './pages/Item/Item';
-import ItemUpdate from "./pages/UpdateItemPage/UpdateItem";
+import UpdateItemPage from "./pages/UpdateItemPage/UpdateItemPage";
 
 const Router = () => {
   return (
@@ -23,10 +23,10 @@ const Router = () => {
 
       <Routes>
         <Route path="/" element={<Intro />} />
-        <Route path="/item" element={<NewItem />} />
+        <Route path="/item" element={<Item />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/*" element={<ErrorPage />} />
-        <Route path="/updateItem/:itemId" element={<ItemUpdate />} />
+        <Route path="/updateItem/:itemId" element={<UpdateItemPage />} />
       </Routes>
 
       <Footer />

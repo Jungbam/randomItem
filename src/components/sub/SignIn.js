@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useDispatch } from "react-redux";
 import { __postSignin } from "../../redux/slice/userSlice";
-import useLoginCheck from "../../hooks/useLoginCheck";
 
 const SignIn = ({ closeModal }) => {
-  console.log(closeModal);
   const [userEmail, setUserEmail] = useState("");
   const [userPw, setUserPw] = useState("");
   const dispatch = useDispatch();
