@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-
   const { isLoading, detail } = useSelector((state) => state.detailSlice);
 
   const item = detail?.data;
@@ -32,7 +31,7 @@ const Detail = () => {
             <Price>{item?.price}</Price>
           </div>
         </ItemWrap>
-        <CommentForm commentlist={item?.Comments} />
+        <CommentForm commentlist={item} />
       </DetailWrap>
     </>
   );
@@ -82,15 +81,6 @@ const Body = styled.div`
 `;
 
 const Price = styled.div`
-  color: #616161;
-  position: relative;
-  left: 150px;
-  font-size: 20px;
-  font-weight: 100;
-  padding-bottom: 50px;
-`;
-
-const TitleWrap = styled.div`
   color: #616161;
   position: relative;
   left: 150px;

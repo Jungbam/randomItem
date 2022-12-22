@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useInputItem from "../../hooks/useInputItem";
 import { deleteItem, updateItem } from "../../redux/slice/itemSlice";
@@ -109,7 +110,10 @@ const Card = ({ el }) => {
           <></>
         )}
       </StLittleCard>
-      <Label>상세보기{el.category}</Label>
+      <Label>{el.category}</Label>
+      <Link to={`/detail/${el.itemId}`}>
+        <p>상세보기</p>
+      </Link>
       {user?.admin ? (
         <StButtonBox>
           <StButton

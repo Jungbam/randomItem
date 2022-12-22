@@ -9,7 +9,9 @@ import ErrorPage from "../ErrorPage/ErrorPage";
 import AddItem from "../Intro/element/AddItem";
 
 const Item = () => {
-  const { error, last, items } = useSelector((state) => state.itemSlice);
+  const { error, last, items, search } = useSelector(
+    (state) => state.itemSlice
+  );
   const user = useSelector((state) => state.userSlice.user);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
@@ -66,9 +68,9 @@ const Item = () => {
             </Modal>
           </StArticleCol>
           <StArticle>
-            {items?.map((el, i) => (
-              <Card key={`card${i}`} el={el} />
-            ))}
+            {search.length === 0
+              ? items?.map((el, i) => <Card key={`card${i}`} el={el} />)
+              : search?.map((el, i) => <Card key={`card${i}`} el={el} />)}
           </StArticle>
         </StItem>
       ) : (

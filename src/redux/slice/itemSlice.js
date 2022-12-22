@@ -7,6 +7,7 @@ const initialState = {
   auth: false,
   items: [],
   famous: [],
+  search: [],
   last: false,
 };
 
@@ -16,7 +17,6 @@ export const getMain = createAsyncThunk(
     try {
       if (response !== 401) {
         const items = await client.get("/api/items/main");
-
         await new Promise((resolve) => setTimeout(resolve, 500));
         const data = { items: items.data.data };
         return { ...data };
@@ -49,12 +49,43 @@ export const getItem = createAsyncThunk(
   }
 );
 
+export const searchLabel = createAsyncThunk(
+  "itemSlice/searchLabel",
+  async (category, thunkAPI) => {
+    try {
+      const items = await client.get(`/api/items/category/${category}`);
+      if (items.status === 200) return items.data;
+      else return thunkAPI.rejectWithValue(items.result);
+    } catch (err) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const searchItem = createAsyncThunk(
+  "itemSlice/searchItem",
+  async (searchValue, thunkAPI) => {
+    try {
+      const items = await client.get(`/api/items/search?title=${searchValue}`);
+      if (items.status === 200) {
+        return items.data;
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
+    } catch (err) {
+      console.log("in");
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
 export const postItem = createAsyncThunk(
   "itemSlice/postItem",
   async (data, thunkAPI) => {
     try {
       let result;
       const response = await client.post("/api/items", data);
+      await new Promise((resolve) => setTimeout(resolve, 500));
       if (response.status === 201) {
         result = await client.get("/api/items");
         return result.data;
@@ -99,8 +130,10 @@ export const updateItem = createAsyncThunk(
 const itemSlice = createSlice({
   name: "itemSlice",
   initialState,
-  reducer: {
-    addlist: (state, action) => {},
+  reducers: {
+    initSearch: (state, action) => {
+      state.search = [];
+    },
   },
   extraReducers: {
     [getMain.pending]: (state, action) => {
@@ -112,6 +145,33 @@ const itemSlice = createSlice({
       state.famous = [...payload.items];
     },
     [getMain.rejected]: (state, action) => {
+      state.isloading = false;
+      state.error = true;
+    },
+
+    [searchLabel.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [searchLabel.fulfilled]: (state, { payload }) => {
+      state.isloading = false;
+      state.auth = true;
+      state.search = [...payload?.data];
+    },
+    [searchLabel.rejected]: (state, action) => {
+      state.isloading = false;
+      alert(action.error.message);
+      state.error = true;
+    },
+
+    [searchItem.pending]: (state, action) => {
+      state.isloading = true;
+    },
+    [searchItem.fulfilled]: (state, { payload }) => {
+      state.isloading = false;
+      state.auth = true;
+      state.search = [...payload?.data];
+    },
+    [searchItem.rejected]: (state, action) => {
       state.isloading = false;
       state.error = true;
     },
@@ -173,6 +233,6 @@ const itemSlice = createSlice({
   },
 });
 
-export const { addlist } = itemSlice.actions;
+export const { initSearch } = itemSlice.actions;
 
 export default itemSlice.reducer;

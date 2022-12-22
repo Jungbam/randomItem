@@ -83,7 +83,6 @@ const userSlice = createSlice({
     },
   },
 });
-console.log(userSlice);
 
 export const { logOut } = userSlice.actions;
 export default userSlice.reducer;
