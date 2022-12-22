@@ -32,7 +32,7 @@ const SignUp = (closeModal) => {
   return (
     <>
       <StH1>회원가입</StH1>
-      <form onSubmit={submitHandler}>
+      <form>
         <StInputWrapper>
           <StInput
             value={email}
@@ -63,7 +63,7 @@ const SignUp = (closeModal) => {
         <p>프로필 사진</p>
         <StFileInput type="file" onChange={change}></StFileInput>
       </StProfile>
-      <StButton type="submit">가입하기</StButton>
+      <StButton onClick={submitHandler}>가입하기</StButton>
     </>
   );
 };

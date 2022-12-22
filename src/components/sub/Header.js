@@ -1,14 +1,14 @@
 //! <<<<<<< feature/intro
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 // import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
-import { logOut } from '../../redux/slice/userSlice';
-import { initSearch, searchItem } from '../../redux/slice/itemSlice';
+import Modal from "../ui/Modal";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import { logOut } from "../../redux/slice/userSlice";
+import { initSearch, searchItem } from "../../redux/slice/itemSlice";
 
 const Header = () => {
   const [signInModalOpen, setSignInModalOpen] = useState(false);
@@ -16,9 +16,11 @@ const Header = () => {
 
   const { isLogedIn } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
-  const { imageSrc, email, nickname } = useSelector((state) => state.userSlice.user);
+  const { imageSrc, email, nickname } = useSelector(
+    (state) => state.userSlice.user
+  );
 
   const closeSignInModal = () => {
     setSignInModalOpen(false);
@@ -43,15 +45,15 @@ const Header = () => {
   const enterKeyHandler = (e) => {
     if (window.event.keyCode === 13) {
       dispatch(searchItem(searchValue));
-      setSearchValue('');
-      navigate('/item');
+      setSearchValue("");
+      navigate("/item");
     }
   };
 
   const enterHandler = (e) => {
     dispatch(searchItem(searchValue));
-    setSearchValue('');
-    navigate('/item');
+    setSearchValue("");
+    navigate("/item");
   };
 
   return (
@@ -61,10 +63,11 @@ const Header = () => {
           placeholder="Search"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          onKeyUp={enterKeyHandler}></input>
+          onKeyUp={enterKeyHandler}
+        ></input>
         <span className="search-logo">
           <label>검색</label>
-          <img src="./image/search.jpg" onClick={enterHandler} />
+          <img src="./image/search.jpg" onClick={enterHandler} alt="검색" />
         </span>
       </SearchWrapper>
       <StNav>
@@ -80,7 +83,7 @@ const Header = () => {
         </div>
 
         <BtnWrapper>
-          {false ? (
+          {isLogedIn ? (
             <StProfile>
               <StImg src={imageSrc} />
               <StUserWrapper>
@@ -92,14 +95,13 @@ const Header = () => {
           ) : (
             <div className="btn">
               <div onClick={showSignInModal}>LOGIN</div>
-              {/*! >>>>>>> feature/KoYunHyeock/CSS*/}
               <Modal modal={signInModalOpen} closeModal={closeSignInModal}>
-                <SignIn />
+                <SignIn closeModal={closeSignInModal} />
               </Modal>
 
               <div onClick={showSignUpModal}>SIGNUP</div>
               <Modal modal={signUpModalOpen} closeModal={closeSignUpModal}>
-                <SignUp />
+                <SignUp closeModal={closeSignUpModal} />
               </Modal>
             </div>
           )}
@@ -172,7 +174,8 @@ const StNav = styled.nav`
   .router {
     div {
       display: inline-block;
-      font: 12px 'Roboto', 'Nanum Gothic', '맑은 고딕', 'Malgun Gothic', sans-serif;
+      font: 12px "Roboto", "Nanum Gothic", "맑은 고딕", "Malgun Gothic",
+        sans-serif;
       font-size: 15px;
       font-weight: 700;
       line-height: 50px;
@@ -186,7 +189,8 @@ const StNav = styled.nav`
       cursor: pointer;
       display: inline-block;
 
-      font-family: 'Roboto', 'Nanum Gothic', '맑은 고딕', 'Malgun Gothic', sans-serif;
+      font-family: "Roboto", "Nanum Gothic", "맑은 고딕", "Malgun Gothic",
+        sans-serif;
       font-size: 12px;
 
       line-height: 50px;
@@ -216,30 +220,11 @@ const BtnWrapper = styled.div`
   margin-right: 20px;
 `;
 
-const animateBox = keyframes`
-  0% {
-    letter-spacing: 1em;
-    transform: translateZ(400px);
-    opacity: 0;
-  }
-  40% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateZ(0);
-    opacity: 1;
-  }
-`;
-const StTitle = styled.div`
-  font-family: 'EF_jejudoldam';
-  animation: ${animateBox} 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
-`;
-
 const StProfile = styled.div`
   display: flex;
-  border: 2px solid #000;
-  background-color: inherit;
+  background-color: #eee;
   opacity: 0.9;
+  border-radius: 12px;
 `;
 const StImg = styled.img`
   width: 50px;

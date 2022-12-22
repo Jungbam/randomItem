@@ -1,17 +1,17 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 // css
-import styled, { keyframes } from 'styled-components';
+import styled from "styled-components";
 // sub, ui
-import FixBox from './components/sub/FixBox';
-import Footer from './components/sub/Footer';
-import Header from './components/sub/Header';
-import Detail from './pages/Detail/Detail';
-import ErrorPage from './pages/ErrorPage/ErrorPage';
-import Intro from './pages/Intro/Intro';
+import FixBox from "./components/sub/FixBox";
+import Footer from "./components/sub/Footer";
+import Header from "./components/sub/Header";
+import Detail from "./pages/Detail/Detail";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import Intro from "./pages/Intro/Intro";
+import NewItem from "./pages/Item/newItem";
 // import Item from './pages/Item/Item';
-import NewItem from './pages/Item/newItem';
-import ItemUpdate from './pages/UpdateItemPage/UpdateItem';
+import ItemUpdate from "./pages/UpdateItemPage/UpdateItem";
 
 const Router = () => {
   return (

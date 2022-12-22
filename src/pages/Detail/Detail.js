@@ -25,11 +25,16 @@ const Detail = () => {
         <Topline>게시글 상세보기 페이지입니다</Topline>
         <ItemWrap>
           <img src={item?.image} alt={item?.title} />
-          <div>
+          <StDivCol>
             <Titleset>{item?.title}</Titleset>
-            <Body>{item?.content}</Body>
-            <Price>{item?.price}</Price>
-          </div>
+            <StDivColDetail>
+              <Body>{item?.content}</Body>
+              <StPrice>
+                <StPriceSpan>{item?.price}</StPriceSpan>
+                <StP>원</StP>
+              </StPrice>
+            </StDivColDetail>
+          </StDivCol>
         </ItemWrap>
         <CommentForm commentlist={item} />
       </DetailWrap>
@@ -42,7 +47,6 @@ export default Detail;
 const DetailWrap = styled.div`
   width: 1000;
   min-height: 100vh;
-
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -61,6 +65,7 @@ const ItemWrap = styled.div`
   width: 1000px;
   border-radius: 20px;
   background-color: white;
+  gap: 100px;
 `;
 
 const Titleset = styled.div`
@@ -68,20 +73,41 @@ const Titleset = styled.div`
   font-size: 40px;
   font-weight: 300;
   padding-bottom: 30px;
-  right: 300px;
+`;
+
+const StDivCol = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Body = styled.div`
   color: #616161;
   position: relative;
-  left: 150px;
   font-size: 20px;
   font-weight: 100;
   padding-bottom: 50px;
 `;
 
-const Price = styled.div`
+const StDivColDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 5px;
+  border-radius: 12px;
+  height: 60%;
+  background-color: #eee;
+`;
+
+const StP = styled.span`
+  line-height: 70px;
+  font-size: 20px;
+`;
+const StPriceSpan = styled.span`
+  font-size: 50px;
+`;
+const StPrice = styled.div`
   color: #616161;
+  font-size: 40px;
   position: relative;
   left: 150px;
   font-size: 20px;

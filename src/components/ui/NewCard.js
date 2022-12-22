@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import useInputItem from '../../hooks/useInputItem';
-import { deleteItem, updateItem } from '../../redux/slice/itemSlice';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+import useInputItem from "../../hooks/useInputItem";
+import { deleteItem } from "../../redux/slice/itemSlice";
+import styled from "styled-components";
 
 const NewCard = ({ el, introBoolean }) => {
-  const authUser = useSelector((state) => state.itemSlice.auth);
+  const user = useSelector((state) => state.userSlice.user);
   const dispatch = useDispatch();
   const { input, setInput, onChangeHandler } = useInputItem();
   const [eventSale, setEventSale] = useState(true);
 
   const styles = { eventSale };
 
-  // console.log('introBoolean: ', introBoolean);
-  // console.log('authUser: ', authUser);
   useEffect(() => {
     setInput({
       title: el.title,
@@ -25,12 +23,10 @@ const NewCard = ({ el, introBoolean }) => {
   }, []);
 
   useEffect(() => {
-    // console.log('componentDidMount');
     let setTime = setInterval(() => {
       setEventSale((prev) => !prev);
     }, 200);
     return () => {
-      // console.log('componentWillUnmount');
       return clearInterval(setTime);
     };
   }, []);
@@ -43,8 +39,13 @@ const NewCard = ({ el, introBoolean }) => {
             <img src={el.image} alt={el.title} />
           </Image>
           <Title>
-            <label>상품명</label>
-            {input.title}
+            <NavLink
+              to={`/detail/${el.itemId}`}
+              style={{ textDecoration: "none" }}
+            >
+              <label>상품명</label>
+              {input.title}
+            </NavLink>
           </Title>
           <Category>
             <label>카테고리</label>
@@ -55,32 +56,50 @@ const NewCard = ({ el, introBoolean }) => {
             <>
               <Price>
                 <label>가격</label>
-                {input.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원
+                {input.price
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                원
               </Price>
               <SalePrice>
                 <label>할인가격</label>
-                할인 판매가 {(input.price - input.price * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원
+                할인 판매가{" "}
+                {(input.price - input.price * 0.1)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                원
               </SalePrice>
               <Img {...styles}>
                 <label>new</label>
-                {eventSale ? <img src="./image/new.jpg"></img> : <img src="./image/new02.jpg"></img>}
-                {/* <span className="eventSale" /> */}
+                {eventSale ? (
+                  <img src="./image/new.jpg" alt="이미지"></img>
+                ) : (
+                  <img src="./image/new02.jpg" alt="이미지"></img>
+                )}
               </Img>
             </>
           ) : (
             <>
               <ItemPagePrice>
                 <label>가격</label>
-                {input.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원
+                {input.price
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                원
               </ItemPagePrice>
             </>
           )}
-          {authUser ? (
+          {user?.admin ? (
             <AdminWrapper>
-              <Link to={`/updateItem/${el.itemId}`}>
+              <NavLink
+                to={`/updateItem/${el.itemId}`}
+                style={{ textDecoration: "none" }}
+              >
                 <UpdateBtn>수정하기</UpdateBtn>
-              </Link>
-              <DeleteBtn onClick={() => dispatch(deleteItem(el.itemId))}>삭제하기</DeleteBtn>
+              </NavLink>
+              <DeleteBtn onClick={() => dispatch(deleteItem(el.itemId))}>
+                삭제하기
+              </DeleteBtn>
             </AdminWrapper>
           ) : null}
         </>
@@ -194,9 +213,6 @@ const Img = styled.div`
   img {
     width: 45px;
     height: 14px;
-    /* display: ${({ eventSale }) => {
-      return eventSale ? 'inline' : 'none';
-    }}; */
   }
 
   .eventSale {

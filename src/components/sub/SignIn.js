@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { __postSignin } from "../../redux/slice/userSlice";
 import useLoginCheck from "../../hooks/useLoginCheck";
 
-const SignIn = ({ closeModal, showImage }) => {
+const SignIn = ({ closeModal }) => {
+  console.log(closeModal);
   const [userEmail, setUserEmail] = useState("");
   const [userPw, setUserPw] = useState("");
   const dispatch = useDispatch();
@@ -13,14 +14,13 @@ const SignIn = ({ closeModal, showImage }) => {
     e.preventDefault();
     dispatch(__postSignin({ email: userEmail, password: userPw }));
     closeModal();
-    showImage(true);
   };
 
   return (
     <>
       <StWellcom>Wellcom</StWellcom>
       <StTitle>RanTem</StTitle>
-      <StForm onSubmit={submitHandler}>
+      <StForm>
         <StH1>로그인</StH1>
         <StWrapper>
           <StInput
@@ -36,7 +36,7 @@ const SignIn = ({ closeModal, showImage }) => {
             placeholder="비밀번호"
           ></StInput>
         </StWrapper>
-        <StButton type="submit">로그인</StButton>
+        <StButton onClick={submitHandler}>로그인</StButton>
       </StForm>
     </>
   );
