@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../ui/Button";
@@ -7,10 +7,13 @@ import Modal from "../ui/Modal";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { logOut } from "../../redux/slice/userSlice";
+import { initSearch, searchItem } from "../../redux/slice/itemSlice";
 
 const Header = () => {
   const { isLogedIn } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
   const { imageSrc, email, nickname } = useSelector(
     (state) => state.userSlice.user
   );
@@ -38,20 +41,38 @@ const Header = () => {
     dispatch(logOut());
   };
 
+  const enterKeyHandler = (e) => {
+    if (window.event.keyCode === 13) {
+      dispatch(searchItem(searchValue));
+      setSearchValue("");
+      navigate("/item");
+    }
+  };
+
+  const enterHandler = (e) => {
+    dispatch(searchItem(searchValue));
+    setSearchValue("");
+    navigate("/item");
+  };
+
   return (
     <StHeader>
       <StHeaderBox>
         <StNav>
           <NavLink to="/item" style={{ textDecoration: "none" }}>
-            ITEM
+            <p onClick={() => dispatch(initSearch())}>ITEM</p>
           </NavLink>
         </StNav>
         <NavLink to="/" style={{ textDecoration: "none" }}>
-          <StTitle>RanTem</StTitle>
+          <StTitle onClick={() => dispatch(initSearch())}>RanTem</StTitle>
         </NavLink>
         <StInputBox>
-          <StInput></StInput>
-          <Button>Enter</Button>
+          <StInput
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyUp={enterKeyHandler}
+          ></StInput>
+          <Button onClick={enterHandler}>Enter</Button>
         </StInputBox>
         {isLogedIn ? (
           <StProfile>

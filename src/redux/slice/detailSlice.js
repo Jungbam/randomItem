@@ -1,39 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { client } from "../../api/axios";
+import { Cookies } from "react-cookie";
 
 const initialState = {
   itemlist: [],
-  detail: {
-    itemid: "",
-    title: "",
-    price: "",
-    content: "",
-    images: {
-      src: "",
-    },
-    comments: [
-      {
-        content: "",
-        User: {
-          nickname: "",
-        },
-      },
-    ],
-  },
+  detail: {},
   isLoading: false,
-  error: null,
+  error: false,
 };
 
 export const __getItems = createAsyncThunk(
   "itemlist/getitems",
   async (payload, thunkAPI) => {
-    // console.log("페이로드다", payload);
     try {
-      const itemlist = await client.get(`/api/items/detail/${payload}`);
-      // console.log("아이템", itemlist);
-
-      return thunkAPI.fulfillWithValue(itemlist.data);
+      const response = await client.get(`/api/items/detail/${payload}`);
+      return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -41,99 +23,116 @@ export const __getItems = createAsyncThunk(
 );
 
 export const __addComment = createAsyncThunk(
-  "itemlist/addComment",
+  "commentlist/addComment",
   async (payload, thunkAPI) => {
-    console.log("serverpayload", payload);
     try {
-      const res = await axios.patch(
-        `${process.env.REACT_APP_SERVER}/api/comments/${payload.itemid}`,
-        payload.content
-      );
-      console.log("res", res);
-      return thunkAPI.fulfillWithValue(res.data);
+      const res = await client.post(`/api/comments/${payload.itemId}`, {
+        content: payload.content,
+      });
+      if (res.status === 201) {
+        const result = await client.get(`api/items/detail/${payload.itemId}`);
+        return thunkAPI.fulfillWithValue(result?.data);
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+//삭제
+export const __deleteComment = createAsyncThunk(
+  "commentlist/deleteComment",
+  async (payload, thunkAPI) => {
+    try {
+      const { commentId, itemId } = payload;
+
+      const res = await client.delete(`/api/comments/${commentId}`);
+      if (res.status === 200) {
+        const result = await client.get(`/api/items/detail/${itemId}`);
+
+        return thunkAPI.fulfillWithValue(result.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
   }
 );
 
-export const __deleteComment = createAsyncThunk(
-  "itemlist/deleteComment",
+export const __updateComment = createAsyncThunk(
+  "commentlist/__updateComment",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios.patch(
-        `https://test-event.herokuapp.com/todos/${payload.id}`,
-        payload
-      );
-      return thunkAPI.fulfillWithValue(res.data);
+      const { commentId, itemId, content } = payload;
+      const res = await client.patch(`/api/comments/${commentId}`, { content });
+      if (res.status === 200) {
+        const result = await client.get(`/api/items/detail/${itemId}`);
+        return thunkAPI.fulfillWithValue(result.data);
+      } else {
+        return thunkAPI.rejectWithValue();
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
   }
 );
+
 const detailSlice = createSlice({
   name: "itemlist",
   initialState,
   reducers: {},
   extraReducers: {
+    //get items
     [__getItems.pending]: (state) => {
       state.isLoading = true;
     },
     [__getItems.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.detail = action.payload;
-      // state.itemlist = action.payload;
-      // console.log("list", state.itemlist);
     },
     [__getItems.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
+    //add comment
     [__addComment.pending]: (state) => {
       state.isLoading = true;
     },
     [__addComment.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.detail.comment = action.payload.content;
+      state.detail = action.payload;
     },
     [__addComment.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
+    //delete comment
+    [__deleteComment.pending]: (state) => {
+      state.isLoading = true;
+    },
+
+    [__deleteComment.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.detail = action.payload;
+    },
+    // updateComment
+    [__deleteComment.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__updateComment.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updateComment.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log(action.payload);
+      state.detail = action.payload;
+    },
+    [__updateComment.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
-// const detailSlice = createSlice({
-//   name: "itemlist",
-//   initialState,
-//   reducers: {
-//     // getItem: (state, action) => {
-//     //  state.mokData = action.payload
-//     // },
-
-//     getComment: (state, action) => {
-//       return {
-//         ...state,
-//         mokData: state.mokData.find((commentid) => {
-//           return commentid.comments === action.payload;
-//         }),
-//       };
-//     },
-
-//     addComment: (state, action) => {
-//       return {
-//         ...state,
-//         mokData: [...state.mokData, action.payload],
-//       };
-//     },
-
-//     deleteComment: (state, action) => {
-//       return {
-//         mokData: state.mokData.filter(
-//           (comment) => comment.id !== action.payload
-//         ),
-//       };
-//     },
-//   },
-// });
 
 export default detailSlice.reducer;
