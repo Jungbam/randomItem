@@ -1,108 +1,88 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Cookies } from "react-cookie";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Cookies } from 'react-cookie';
+import { client } from '../../api/axios';
 
-//    <  토큰이 필요한 API에 post,delete 요청을 할때 header 작성 양식  >
-// headers: {
-//   Authorization: `Bearer ${token}`
-// } // Bearer하고 띄어쓰기 있음
-
-//    <  로그인 thunk 함수  >
-export const __postSignin = createAsyncThunk(
-  "POST_SIGNIN", //액션 벨류
-  async (arg, thunkAPI) => {
-    console.log("로그인 thunk 함수작동");
-    // const cookie = new Cookies();
-    try {
-      const signinData = await axios.post(
-        `http://koyunhyeok.shop/api/auth/login`,
-        arg
-      );
-      // console.log("서버로 부터 response를 받아옴")
-      console.log("signInResponse:", signinData.data.result);
-      //쿠키에 토큰 저장
-      // cookie.set('token', signinData.data.result.token)
-
-      return thunkAPI.fulfillWithValue(signinData.data.result);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
+const cookie = new Cookies();
+export const __authSing = createAsyncThunk('userSlice/__authSing', async (arg, thunkAPI) => {
+  try {
+    const signInData = await client.get(`/api/auth`);
+    if (signInData.status !== 401) {
+      return thunkAPI.fulfillWithValue(signInData.data.result);
+    } else {
+      return thunkAPI.rejectWithValue(401);
     }
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
 
-//    <  회원가입 thunk 함수  >
-export const __postSignup = createAsyncThunk(
-  "POST_SIGNUP",
-  async (arg, thunkAPI) => {
-    const cookie = new Cookies();
-    try {
-      //form data형식으로 header에 설정
-      const signupData = await axios({
-        method: "post",
-        url: "http://koyunhyeok.shop/api/auth/signup",
-        data: arg,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      cookie.set("isLogedin", signupData.data.result);
-      return thunkAPI.fulfillWithValue(signupData.data);
-    } catch (e) {
-      //isLogedin
-      return thunkAPI.rejectWithValue(e);
-    }
+export const __postSignin = createAsyncThunk('userSlice/__postSignin', async (arg, thunkAPI) => {
+  try {
+    const signInData = await client.post(`/api/auth/login`, arg);
+    return thunkAPI.fulfillWithValue(signInData.data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
-// const initialState = {
-//   message: '',
-//   result: true,
-//   error: null
-// }
+});
+
+export const __postSignup = createAsyncThunk('userSlice/__postSignup', async (arg, thunkAPI) => {
+  try {
+    const signupData = await client.post('/api/auth/signup', arg);
+    return thunkAPI.fulfillWithValue(signupData.data);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e);
+  }
+});
+
 const initialState = {
-  user: [],
+  user: {},
   isLogedIn: false,
+  error: '',
 };
 
-//리듀서
 const userSlice = createSlice({
-  name: "userSlice",
+  name: 'userSlice',
   initialState: initialState,
-  reducer: {
-    addlist: (state, action) => {
-      return state;
-    },
-    logedIn: (state, action) => {
-      state.bool = action.payload;
-    },
-    logedOut: (state, action) => {
-      console.log("bool작동");
-      state.bool = action.payload;
+  reducers: {
+    logOut: (state, action) => {
+      state.isLogedIn = false;
+      cookie.remove('token');
     },
   },
+
   extraReducers: {
-    //     <  회원가입  >
+    [__authSing.pending]: (state) => {},
+    [__authSing.fulfilled]: (state, action) => {
+      const { result, ...user } = action.payload;
+      state.user = user;
+      state.isLogedIn = true;
+    },
+    [__authSing.rejected]: (state, action) => {
+      state.user = {};
+      state.isLogedIn = false;
+    },
+
     [__postSignup.pending]: (state) => {},
     [__postSignup.fulfilled]: (state, action) => {
       state.user = action.payload.result;
     },
     [__postSignup.rejected]: (state, action) => {
-      // state.error = action
+      state.isLogedIn = false;
     },
 
-    //    <  로그인  >
     [__postSignin.pending]: (state) => {},
     [__postSignin.fulfilled]: (state, action) => {
-      console.log("로그인 fulfilled ,action:", action);
-      state.user = action.payload;
-
-      // state = action
+      const { token, ...user } = action.payload;
+      cookie.set('token', token);
+      state.user = user;
+      state.isLogedIn = true;
     },
     [__postSignin.rejected]: (state, action) => {
-      console.log("로그인 에러:", action.payload);
       state.error = action.payload;
+      state.isLogedIn = false;
     },
   },
 });
 
-export const { addlist, logedIn, logedOut } = userSlice.actions;
+export const { logOut } = userSlice.actions;
 export default userSlice.reducer;

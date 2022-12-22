@@ -12,8 +12,12 @@ client.interceptors.request.use(function (config) {
   return config;
 });
 
-client.interceptors.response.use(function (response) {
-
-
-  return response;
-});
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response.status === 401) {
+      cookie.remove("token");
+      return 401;
+    }
+  }
+);
